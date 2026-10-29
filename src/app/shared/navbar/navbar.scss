@@ -1,0 +1,38 @@
+.sympla-toolbar {
+  background-color: #ffffff !important;
+  color: #111111;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 22px;
+  color: #ff5500; /* Tom laranja característico de plataformas de eventos */
+  cursor: pointer;
+  letter-spacing: -0.5px;
+}
+
+.logo strong {
+  color: #2d3748;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar button {
+  color: #4a5568;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+mat-toolbar button:hover {
+  color: #ff5500;
+}
+
+.btn-login {
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+}

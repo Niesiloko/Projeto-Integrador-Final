@@ -1,0 +1,22 @@
+<app-navbar></app-navbar>
+<div class="page-container">
+  <h2>Meus Ingressos Comprados</h2>
+  
+  <div class="tickets-grid">
+    <mat-card appearance="outlined" *ngFor="let ing of ingressos" class="ticket-card">
+      <div class="ticket-header">
+        <span class="badge">CONFIRMADO</span>
+        <h3>{{ ing.eventoNome }}</h3>
+      </div>
+      <mat-card-content class="ticket-body">
+        <p><strong>Data:</strong> {{ ing.data }}</p>
+        <p><strong>Local:</strong> {{ ing.local }}</p>
+        <p><strong>Participante:</strong> {{ ing.titular }}</p>
+        <div class="qrcode-placeholder">
+          <mat-icon>qr_code_2</mat-icon>
+          <span>Apresente na entrada</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

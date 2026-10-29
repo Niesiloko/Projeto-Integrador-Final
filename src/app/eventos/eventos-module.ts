@@ -9,11 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { EventosRoutingModule } from './eventos-routing-module';
 import { CadastroEvento } from './cadastro-evento/cadastro-evento';
+import { CriarEvento } from './criar-evento/criar-evento';
+import { MeusEventos } from './meus-eventos/meus-eventos';
+import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 
 @NgModule({
-  declarations: [
-    CadastroEvento
-  ],
+  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,10 +22,8 @@ import { CadastroEvento } from './cadastro-evento/cadastro-evento';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
-  exports: [
-    CadastroEvento
-  ]
+  exports: [CadastroEvento],
 })
-export class EventosModule { }
+export class EventosModule {}

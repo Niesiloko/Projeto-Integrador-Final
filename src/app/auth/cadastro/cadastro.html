@@ -1,0 +1,30 @@
+<div class="auth-container">
+  <mat-card appearance="outlined" class="auth-card">
+    <mat-card-header>
+      <mat-card-title>Criar sua Conta</mat-card-title>
+      <mat-card-subtitle>Junte-se à maior plataforma de eventos acadêmicos e corporativos</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Nome Completo</mat-label>
+        <input matInput [(ngModel)]="nome" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" [(ngModel)]="email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" [(ngModel)]="senha" required>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions class="auth-actions">
+      <button mat-flat-button color="primary" class="btn-block" (click)="cadastrar()">Cadastrar</button>
+      <p class="auth-link">Já possui uma conta? <a routerLink="/login">Faça login</a></p>
+    </mat-card-actions>
+  </mat-card>
+</div>

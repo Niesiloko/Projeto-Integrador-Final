@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+<div class="page-container">
+  <div class="header-action">
+    <h2>Meus Eventos Criados</h2>
+    <button mat-flat-button color="primary" class="btn-primary-sympla" routerLink="/criar-evento">
+      <mat-icon>add</mat-icon> Novo Evento
+    </button>
+  </div>
+
+  <div class="events-grid">
+    <mat-card appearance="outlined" *ngFor="let ev of meusEventos" class="event-item-card">
+      <mat-card-header>
+        <mat-card-title>{{ ev.titulo }}</mat-card-title>
+        <mat-card-subtitle>{{ ev.data }} — {{ ev.local }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ ev.descricao }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary">Editar</button>
+        <button mat-button color="warn">Excluir</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

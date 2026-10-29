@@ -1,0 +1,53 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  background-color: #f7fafc;
+  padding: 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  background: white !important;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 12px;
+  padding: 0;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  background-color: #ff5500 !important;
+}
+
+.auth-link {
+  text-align: center;
+  font-size: 14px;
+  color: #718096;
+}
+
+.auth-link a {
+  color: #ff5500;
+  text-decoration: none;
+  font-weight: 600;
+}

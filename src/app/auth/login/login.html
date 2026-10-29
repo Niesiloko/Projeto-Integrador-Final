@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <mat-card appearance="outlined" class="auth-card">
+    <mat-card-header>
+      <mat-card-title>Acessar o Conecta Event</mat-card-title>
+      <mat-card-subtitle>Entre para gerenciar seus ingressos e eventos</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" [(ngModel)]="email" placeholder="seu@email.com" required>
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" [(ngModel)]="senha" required>
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions class="auth-actions">
+      <button mat-flat-button color="primary" class="btn-block" (click)="fazerLogin()">Entrar</button>
+      <p class="auth-link">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
+    </mat-card-actions>
+  </mat-card>
+</div>
