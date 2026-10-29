@@ -1,0 +1,43 @@
+<main class="pagina">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Cadastro de evento — Conecta Event</mat-card-title>
+      <mat-card-subtitle>
+        Informe os dados do evento para divulgação e inscrições
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do evento</mat-label>
+        <input matInput name="nome" required [(ngModel)]="nome">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Local do evento</mat-label>
+        <input matInput name="local" required [(ngModel)]="local">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data e horário</mat-label>
+        <input matInput name="dataHorario" placeholder="Ex: 15/11/2026 às 19h" [(ngModel)]="dataHorario">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput name="descricao" rows="4" [(ngModel)]="descricao"></textarea>
+      </mat-form-field>
+
+      <p *ngIf="mensagem" role="status">{{ mensagem }}</p>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button type="button" (click)="limpar()">
+        Limpar
+      </button>
+      <button mat-flat-button type="button" [disabled]="!nome.trim() || !local.trim()" (click)="salvar()">
+        Salvar evento
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</main>
