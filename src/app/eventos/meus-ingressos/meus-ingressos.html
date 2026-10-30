@@ -9,7 +9,7 @@
         <h3>{{ ing.eventoNome }}</h3>
       </div>
       <mat-card-content class="ticket-body">
-        <p><strong>Data:</strong> {{ ing.data }}</p>
+        <p><strong>Data:</strong> {{ ing.data | date:'dd/MM/yyyy HH:mm' }}</p>
         <p><strong>Local:</strong> {{ ing.local }}</p>
         <p><strong>Participante:</strong> {{ ing.titular }}</p>
         <div class="qrcode-placeholder">

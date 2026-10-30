@@ -1,0 +1,77 @@
+$laranja: #ff5500;
+$laranja-escuro: #d94800;
+$branco: #ffffff;
+$cinza-texto: #4a5568;
+$sombra: 0 2px 8px rgba(0, 0, 0, .1);
+
+.page-container {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.form-card {
+  padding: 24px;
+  background: $branco !important;
+  box-shadow: $sombra;
+  border-top: 5px solid $laranja !important;
+
+  // cor do foco dos campos (substitui o magenta padrão do Material)
+  --mat-form-field-outlined-focus-outline-color: #{$laranja};
+  --mat-form-field-outlined-focus-label-text-color: #{$laranja};
+  --mat-form-field-outlined-caret-color: #{$laranja};
+
+  mat-card-header {
+    margin-bottom: 24px;
+  }
+
+  mat-card-title {
+    font-size: 24px;
+    color: #1a202c;
+  }
+
+  mat-card-subtitle {
+    color: $cinza-texto;
+    margin-top: 4px;
+  }
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.row-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+mat-card-actions {
+  padding: 8px 16px 0 !important;
+  gap: 8px;
+}
+
+.btn-cancelar {
+  color: $cinza-texto !important;
+}
+
+.btn-primary-sympla {
+  background-color: $laranja !important;
+  color: $branco !important;
+  border-radius: 24px;
+  padding: 0 24px;
+
+  &:hover {
+    background-color: $laranja-escuro !important;
+  }
+}

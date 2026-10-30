@@ -1,13 +1,12 @@
-
 <div class="page-container">
   <div class="header-action">
     <h2>Meus Eventos Criados</h2>
-    <button mat-flat-button color="primary" class="btn-primary-sympla" routerLink="/criar-evento">
+    <button mat-flat-button class="btn-primary-sympla" routerLink="/criar-evento">
       <mat-icon>add</mat-icon> Novo Evento
     </button>
   </div>
 
-  <div class="events-grid">
+  <div class="events-grid" *ngIf="meusEventos.length > 0; else vazio">
     <mat-card appearance="outlined" *ngFor="let ev of meusEventos" class="event-item-card">
       <mat-card-header>
         <mat-card-title>{{ ev.titulo }}</mat-card-title>
@@ -22,4 +21,11 @@
       </mat-card-actions>
     </mat-card>
   </div>
+
+  <ng-template #vazio>
+    <div class="vazio">
+      <p>Você ainda não criou eventos.</p>
+      <a routerLink="/criar-evento">Criar meu primeiro evento</a>
+    </div>
+  </ng-template>
 </div>

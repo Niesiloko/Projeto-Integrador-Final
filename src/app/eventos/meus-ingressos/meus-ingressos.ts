@@ -7,22 +7,18 @@ import { Component } from '@angular/core';
   templateUrl: './meus-ingressos.html',
 })
 export class MeusIngressos {
-  ingressos = [
+   ingressos = [
     {
-      id: 1,
       eventoNome: 'Workshop de Angular',
-      titular: 'Seu Nome',
-      data: '2026-11-20T19:00',
-      local: 'Auditório UNIFIO',
-      codigo: 'CE-0001'
+      data: '20/11/2026 às 19:00',
+      local: 'Auditório UNIFIO, Ourinhos/SP',
+      titular: 'Seu Nome'
     },
     {
-      id: 2,
       eventoNome: 'Feira de Tecnologia',
-      titular: 'Seu Nome',
-      data: '2026-12-05T14:00',
-      local: 'Ourinhos/SP',
-      codigo: 'CE-0002'
+      data: '05/12/2026 às 14:00',
+      local: 'Centro de Eventos, Ourinhos/SP',
+      titular: 'Seu Nome'
     }
   ];
 }

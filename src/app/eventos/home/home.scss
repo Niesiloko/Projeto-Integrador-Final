@@ -1,0 +1,124 @@
+$laranja: #ff5500;
+$laranja-escuro: #d94800;
+$branco: #ffffff;
+$cinza-fundo: #edf2f7;
+$cinza-texto: #4a5568;
+$sombra: 0 2px 8px rgba(0, 0, 0, .1);
+
+.busca {
+  padding: 48px 16px;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 20px;
+    color: #1a202c;
+  }
+
+  .busca-barra {
+    display: flex;
+    gap: 12px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: $branco;
+    border-radius: 32px;
+    padding: 8px 8px 8px 20px;
+    box-shadow: $sombra;
+    align-items: center;
+
+    input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      font-size: 16px;
+      color: $cinza-texto;
+      background: transparent;
+    }
+
+    .local {
+      background: $cinza-fundo;
+      color: $cinza-texto;
+      padding: 8px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .btn-buscar {
+      background: $laranja;
+      color: $branco;
+      border: 0;
+      padding: 10px 22px;
+      border-radius: 24px;
+      cursor: pointer;
+
+      &:hover { background: $laranja-escuro; }
+    }
+  }
+}
+
+.secao {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 0 16px;
+
+  h2 {
+    margin-bottom: 24px;
+    color: #1a202c;
+  }
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: $branco;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: $sombra;
+  border-left: 5px solid $laranja;
+  transition: transform .15s;
+
+  &:hover { transform: translateY(-3px); }
+
+  img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-corpo {
+    padding: 16px;
+
+    h3 { margin: 0 0 6px; color: #1a202c; }
+    p { margin: 0 0 10px; color: $cinza-texto; }
+
+    small {
+      display: inline-block;
+      background: $cinza-fundo;
+      color: $cinza-texto;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+  }
+}
+
+.vazio {
+  text-align: center;
+  color: $cinza-texto;
+  padding: 32px;
+
+  a {
+    display: inline-block;
+    margin-top: 12px;
+    background: $laranja;
+    color: $branco;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+
+    &:hover { background: $laranja-escuro; }
+  }
+}

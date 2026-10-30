@@ -1,0 +1,27 @@
+<section class="busca">
+  <h1>Encontre experiências perto de você</h1>
+  <div class="busca-barra">
+    <input type="text" placeholder="Buscar experiências" [(ngModel)]="busca" />
+    <span class="local">📍 {{ local }}</span>
+    <button class="btn-buscar">Buscar</button>
+  </div>
+</section>
+
+<section class="secao">
+  <h2>Eventos em destaque</h2>
+
+  <div class="grade" *ngIf="eventosFiltrados.length; else vazio">
+    <article class="card" *ngFor="let e of eventosFiltrados">
+      <img [src]="e.imagem" [alt]="e.titulo" />
+      <div class="card-corpo">
+        <h3>{{ e.titulo }}</h3>
+        <p>{{ e.cidade }}</p>
+        <small>{{ e.data }}</small>
+      </div>
+    </article>
+  </div>
+
+  <ng-template #vazio>
+    <p class="vazio">Nenhum evento encontrado.</p>
+  </ng-template>
+</section>
