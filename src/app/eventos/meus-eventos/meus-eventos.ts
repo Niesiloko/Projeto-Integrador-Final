@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './meus-eventos.scss',
   templateUrl: './meus-eventos.html',
 })
-export class MeusEventos {}
+export class MeusEventos {
+
+  meusEventos: any[] = JSON.parse(localStorage.getItem('eventos') || '[]');
+
+}
