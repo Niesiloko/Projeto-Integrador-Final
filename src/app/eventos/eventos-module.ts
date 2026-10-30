@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 import { EventosRoutingModule } from './eventos-routing-module';
 import { CadastroEvento } from './cadastro-evento/cadastro-evento';
@@ -17,7 +19,9 @@ import { MeusIngressos } from './meus-ingressos/meus-ingressos';
   declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos],
   imports: [
     CommonModule,
+    MatIconModule,
     FormsModule,
+    ReactiveFormsModule,
     EventosRoutingModule,
     MatCardModule,
     MatFormFieldModule,

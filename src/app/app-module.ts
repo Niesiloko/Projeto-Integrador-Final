@@ -3,14 +3,13 @@ import { BrowserModule,  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
+
+import { App } from './app';
 import { AppRoutingModule } from './app-routing-module';
 
 // Componentes
 import { Login } from './auth/login/login';
 import { Cadastro} from './auth/cadastro/cadastro';
-import { CriarEvento } from './eventos/criar-evento/criar-evento';
-import { MeusEventos } from './eventos/meus-eventos/meus-eventos';
-import { MeusIngressos } from './eventos/meus-ingressos/meus-ingressos';
 import { Navbar } from './shared/navbar/navbar';
 
 // Angular Material Modules
@@ -24,12 +23,9 @@ import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    AppModule,
+    App,
     Login,
     Cadastro,
-    CriarEvento,
-    MeusEventos,
-    MeusIngressos,
     Navbar
   ],
   imports: [
@@ -47,6 +43,6 @@ import { MatTableModule } from '@angular/material/table';
   providers: [
     provideAnimations()
   ],
-  bootstrap: [AppModule ]
+  bootstrap: [App]
 })
 export class AppModule { }
