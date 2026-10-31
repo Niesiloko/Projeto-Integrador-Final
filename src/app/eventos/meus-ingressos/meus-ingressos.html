@@ -1,19 +1,42 @@
-
 <div class="page-container">
-  <h2>Meus Ingressos Comprados</h2>
-  
+  <h2>Meus Ingressos</h2>
+
   <div class="tickets-grid">
     <mat-card appearance="outlined" *ngFor="let ing of ingressos" class="ticket-card">
       <div class="ticket-header">
-        <span class="badge">CONFIRMADO</span>
+        <span class="badge">Confirmado</span>
         <h3>{{ ing.eventoNome }}</h3>
       </div>
+
+      <div class="ticket-divider"></div>
+
       <mat-card-content class="ticket-body">
-        <p><strong>Data:</strong> {{ ing.data | date:'dd/MM/yyyy HH:mm' }}</p>
-        <p><strong>Local:</strong> {{ ing.local }}</p>
-        <p><strong>Participante:</strong> {{ ing.titular }}</p>
+        <div class="info">
+          <mat-icon>event</mat-icon>
+          <div>
+            <small>Data</small>
+            <span>{{ ing.data }}</span>
+          </div>
+        </div>
+
+        <div class="info">
+          <mat-icon>place</mat-icon>
+          <div>
+            <small>Local</small>
+            <span>{{ ing.local }}</span>
+          </div>
+        </div>
+
+        <div class="info">
+          <mat-icon>person</mat-icon>
+          <div>
+            <small>Participante</small>
+            <span>{{ ing.titular }}</span>
+          </div>
+        </div>
+
         <div class="qrcode-placeholder">
-          <mat-icon>qr_code_2</mat-icon>
+          <mat-icon>qr_code</mat-icon>
           <span>Apresente na entrada</span>
         </div>
       </mat-card-content>

@@ -1,50 +1,131 @@
+$laranja: #ff5500;
+$branco: #ffffff;
+$cinza-fundo: #edf2f7;
+$cinza-texto: #4a5568;
+$cinza-claro: #718096;
+$texto-escuro: #1a202c;
+$verde: #2f855a;
+$verde-claro: #e6f6ec;
+$fundo-pagina: #fdf7f7; // mesma cor do fundo da página (para os "furos" do ingresso)
+$sombra: 0 2px 8px rgba(0, 0, 0, .1);
+
 .page-container {
   max-width: 1000px;
   margin: 32px auto;
   padding: 0 16px;
+
+  h2 {
+    margin: 0 0 24px;
+    color: $texto-escuro;
+  }
 }
 
-.form-card {
-  padding: 24px;
-  background: #ffffff !important;
-}
-
-.row-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.btn-primary-sympla {
-  background-color: #ff5500 !important;
-  color: white !important;
-}
-
-.header-action {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.events-grid, .tickets-grid {
+.tickets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
 .ticket-card {
-  border-left: 5px solid #ff5500 !important;
-  padding: 16px;
+  position: relative;
+  padding: 0 !important;
+  background: $branco !important;
+  border-left: 5px solid $laranja !important;
+  border-radius: 12px !important;
+  box-shadow: $sombra;
+  overflow: visible !important;
+  transition: transform .15s, box-shadow .15s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  }
+}
+
+.ticket-header {
+  padding: 20px 20px 16px;
+
+  h3 {
+    margin: 12px 0 0;
+    font-size: 20px;
+    color: $texto-escuro;
+  }
+}
+
+.badge {
+  display: inline-block;
+  background: $verde-claro;
+  color: $verde;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+// linha tracejada com "furos" nas laterais, como um ingresso de verdade
+.ticket-divider {
+  position: relative;
+  border-top: 2px dashed #e2e8f0;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -11px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: $fundo-pagina;
+  }
+
+  &::before { left: -10px; }
+  &::after { right: -10px; }
+}
+
+.ticket-body {
+  padding: 20px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  mat-icon {
+    color: $laranja;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  small {
+    color: $cinza-claro;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+
+  span {
+    color: $texto-escuro;
+    font-weight: 500;
+  }
 }
 
 .qrcode-placeholder {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: #edf2f7;
-  padding: 10px;
+  background: $cinza-fundo;
+  padding: 12px;
   border-radius: 8px;
-  margin-top: 12px;
-  color: #4a5568;
+  margin-top: 6px;
+  color: $cinza-texto;
 }

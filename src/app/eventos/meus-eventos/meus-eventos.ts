@@ -10,4 +10,11 @@ export class MeusEventos {
 
   meusEventos: any[] = JSON.parse(localStorage.getItem('eventos') || '[]');
 
+  excluir(id: number) {
+    if (!confirm('Deseja excluir este evento?')) {
+      return;
+    }
+    this.meusEventos = this.meusEventos.filter(e => e.id !== id);
+    localStorage.setItem('eventos', JSON.stringify(this.meusEventos));
+  }
 }
