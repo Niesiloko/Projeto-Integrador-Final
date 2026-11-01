@@ -7,4 +7,5 @@ export interface Evento {
   descricao: string;
   valor: number;
   imagem?: string;
+  organizadorEmail?: string;
 }

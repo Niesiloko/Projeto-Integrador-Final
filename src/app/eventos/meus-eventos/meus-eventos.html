@@ -2,9 +2,10 @@
   <div class="header-action">
     <div>
       <h2>Meus Eventos Criados</h2>
-      <p class="subtitulo" *ngIf="meusEventos.length > 0">
-        {{ meusEventos.length }} {{ meusEventos.length === 1 ? 'evento publicado' : 'eventos publicados' }}
-      </p>
+     <p class="subtitulo" *ngIf="meusEventos.length > 0">
+  {{ meusEventos.length }} {{ meusEventos.length === 1 ? 'evento publicado' : 'eventos publicados' }}
+  · Receita total: <strong>{{ receitaTotal | currency:'BRL' }}</strong>
+</p>
     </div>
     <button mat-flat-button class="btn-primary-sympla" routerLink="/eventos/criar-evento">
       <mat-icon>add</mat-icon> Novo Evento
@@ -34,6 +35,24 @@
 </div>
 
         <p class="descricao" *ngIf="ev.descricao">{{ ev.descricao }}</p>
+        <div class="vendas" *ngIf="resumos[ev.id] as r">
+  <div>
+    <small>Ingressos vendidos</small>
+    <strong>{{ r.vendidos }}</strong>
+  </div>
+  <div>
+    <small>Receita</small>
+    <strong>{{ r.receita | currency:'BRL' }}</strong>
+  </div>
+</div>
+
+<div class="reembolsos" *ngIf="resumos[ev.id] && resumos[ev.id].pendentes.length > 0">
+  <h4>Reembolsos pendentes</h4>
+  <div class="reembolso-item" *ngFor="let p of resumos[ev.id].pendentes">
+    <span>{{ p.titular }}</span>
+    <button mat-button class="btn-aprovar" (click)="aprovar(p)">Aprovar</button>
+  </div>
+</div>
       </mat-card-content>
 
       <div class="card-acoes">

@@ -15,13 +15,17 @@ export class EventoService {
     return this.listar().find(e => e.id === id);
   }
 
-  salvar(dados: Omit<Evento, 'id'>): Evento {
-    const evento: Evento = { id: Date.now(), ...dados };
-    const lista = this.listar();
-    lista.push(evento);
-    localStorage.setItem(this.chave, JSON.stringify(lista));
-    return evento;
-  }
+ listarDoOrganizador(email: string): Evento[] {
+  return this.listar().filter(e => e.organizadorEmail === email);
+}
+
+salvar(dados: Omit<Evento, 'id' | 'organizadorEmail'>, organizadorEmail: string): Evento {
+  const evento: Evento = { id: Date.now(), ...dados, organizadorEmail };
+  const lista = this.listar();
+  lista.push(evento);
+  localStorage.setItem(this.chave, JSON.stringify(lista));
+  return evento;
+}
 
   excluir(id: number) {
     const lista = this.listar().filter(e => e.id !== id);
