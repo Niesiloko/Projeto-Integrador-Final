@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -8,19 +9,21 @@ import { Router } from '@angular/router';
   templateUrl: './cadastro.html',
 })
 export class Cadastro {
-
   nome = '';
   email = '';
   senha = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   cadastrar() {
     if (!this.nome || !this.email || !this.senha) {
       alert('Preencha todos os campos.');
       return;
     }
-    alert('Cadastro realizado com sucesso!');
-    this.router.navigate(['/login']);
+    const resultado = this.auth.cadastrar(this.nome, this.email, this.senha);
+    alert(resultado.mensagem);
+    if (resultado.ok) {
+      this.router.navigate(['/login']);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,17 +9,20 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class Login {
-    email = '';
+  email = '';
   senha = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   fazerLogin() {
     if (!this.email || !this.senha) {
       alert('Preencha e-mail e senha.');
       return;
     }
-    // Simulação (ainda sem back-end)
-    this.router.navigate(['/eventos/meus-eventos']);
+    if (!this.auth.login(this.email, this.senha)) {
+      alert('E-mail ou senha incorretos.');
+      return;
+    }
+    this.router.navigate(['/']);
   }
 }

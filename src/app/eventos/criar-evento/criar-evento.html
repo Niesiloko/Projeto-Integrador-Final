@@ -36,6 +36,11 @@
       </div>
 
       <mat-form-field appearance="outline">
+  <mat-label>Link da imagem (opcional)</mat-label>
+  <input matInput [(ngModel)]="evento.imagem" placeholder="https://...">
+</mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Descrição Completa</mat-label>
         <textarea matInput [(ngModel)]="evento.descricao" rows="5" placeholder="Detalhes sobre a programação, palestrantes..."></textarea>
       </mat-form-field>

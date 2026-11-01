@@ -21,9 +21,10 @@
 
   <div class="grade" *ngIf="eventosFiltrados.length > 0; else vazio">
     <article class="card" *ngFor="let e of eventosFiltrados">
-      <div class="card-capa">
-        <mat-icon>event</mat-icon>
-      </div>
+     <div class="card-capa">
+  <img *ngIf="e.imagem; else icone" [src]="e.imagem" [alt]="e.titulo" />
+  <ng-template #icone><mat-icon>event</mat-icon></ng-template>
+</div>
       <div class="card-corpo">
         <span class="categoria">{{ e.categoria }}</span>
         <h3>{{ e.titulo }}</h3>

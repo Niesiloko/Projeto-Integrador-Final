@@ -6,4 +6,5 @@ export interface Evento {
   local: string;
   descricao: string;
   valor: number;
+  imagem?: string;
 }

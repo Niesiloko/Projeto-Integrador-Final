@@ -40,3 +40,11 @@ mat-toolbar button:hover {
 .logo {
   cursor: pointer;
 }
+
+.usuario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 8px;
+  font-weight: 500;
+}

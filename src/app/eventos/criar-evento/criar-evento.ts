@@ -16,7 +16,8 @@ export class CriarEvento {
     data: '',
     local: '',
     descricao: '',
-    valor: 0
+    valor: 0,
+    imagem: ''
   };
 
   constructor(private router: Router, private eventoService: EventoService) {}

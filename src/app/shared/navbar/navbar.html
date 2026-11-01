@@ -19,7 +19,16 @@
     <mat-icon>confirmation_number</mat-icon> Meus ingressos
   </button>
 
-  <button mat-button routerLink="/login" class="btn-login">
+  <button mat-button routerLink="/login" class="btn-login" *ngIf="!auth.estaLogado">
     <mat-icon>account_circle</mat-icon> Entrar
   </button>
+
+  <ng-container *ngIf="auth.estaLogado">
+    <span class="usuario">
+      <mat-icon>account_circle</mat-icon> {{ auth.usuarioLogado?.nome }}
+    </span>
+    <button mat-button (click)="sair()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+  </ng-container>
 </mat-toolbar>
