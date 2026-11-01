@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Evento } from '../../shared/navbar/evento.model';
+import { EventoService } from '../../shared/navbar/evento.service';
 
 @Component({
   selector: 'app-home',
@@ -7,17 +9,37 @@ import { Component } from '@angular/core';
   styleUrl: './home.scss'
 })
 export class Home {
+  eventos: Evento[] = [];
+
   busca = '';
-  local = 'Ourinhos, SP';
+  local = '';
+  categoria = '';
+  data = '';
 
-  eventos = [
-    { titulo: 'Workshop de Angular', cidade: 'Ourinhos/SP', data: '20/11/2026', imagem: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600' },
-    { titulo: 'Feira de Tecnologia', cidade: 'Ourinhos/SP', data: '05/12/2026', imagem: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600' },
-    { titulo: 'Festival de Música', cidade: 'Marília/SP', data: '12/12/2026', imagem: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=600' }
-  ];
-
-  get eventosFiltrados() {
-    const t = this.busca.toLowerCase();
-    return this.eventos.filter(e => e.titulo.toLowerCase().includes(t));
+  constructor(private eventoService: EventoService) {
+    this.eventos = this.eventoService.listar();
   }
-} 
+
+  get categorias(): string[] {
+    return [...new Set(this.eventos.map(e => e.categoria).filter(c => !!c))];
+  }
+
+  get eventosFiltrados(): Evento[] {
+    const nome = this.busca.trim().toLowerCase();
+    const local = this.local.trim().toLowerCase();
+
+    return this.eventos.filter(e =>
+      (!nome || e.titulo.toLowerCase().includes(nome)) &&
+      (!local || e.local.toLowerCase().includes(local)) &&
+      (!this.categoria || e.categoria === this.categoria) &&
+      (!this.data || e.data.startsWith(this.data))
+    );
+  }
+
+  limpar() {
+    this.busca = '';
+    this.local = '';
+    this.categoria = '';
+    this.data = '';
+  }
+}

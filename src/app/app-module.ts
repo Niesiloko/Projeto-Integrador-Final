@@ -7,12 +7,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { App } from './app';
 import { AppRoutingModule } from './app-routing-module';
 
-// Componentes
 import { Login } from './auth/login/login';
 import { Cadastro} from './auth/cadastro/cadastro';
 import { Navbar } from './shared/navbar/navbar';
 
-// Angular Material Modules
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -42,7 +41,7 @@ import { MatTableModule } from '@angular/material/table';
   ],
   providers: [
     provideAnimations()
-  ],
+  ], 
   bootstrap: [App]
 })
 export class AppModule { }

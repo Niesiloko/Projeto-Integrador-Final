@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { EventoService } from '../../shared/navbar/evento.service';
 
 @Component({
   selector: 'app-criar-evento',
@@ -14,20 +15,23 @@ export class CriarEvento {
     categoria: '',
     data: '',
     local: '',
-    descricao: ''
+    descricao: '',
+    valor: 0
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private eventoService: EventoService) {}
 
   salvarEvento() {
-    if (!this.evento.titulo || !this.evento.data || !this.evento.local) {
-      alert('Preencha título, data e local.');
+    if (!this.evento.titulo || !this.evento.categoria || !this.evento.data || !this.evento.local) {
+      alert('Preencha título, categoria, data/horário e local.');
       return;
     }
-    const salvos = JSON.parse(localStorage.getItem('eventos') || '[]');
-    salvos.push({ id: Date.now(), ...this.evento });
-    localStorage.setItem('eventos', JSON.stringify(salvos));
+    if (this.evento.valor < 0) {
+      alert('O valor do ingresso não pode ser negativo.');
+      return;
+    }
 
+    this.eventoService.salvar(this.evento);
     this.router.navigate(['/eventos/meus-eventos']);
   }
 }

@@ -28,6 +28,10 @@
           <mat-icon>place</mat-icon>
           <span>{{ ev.local }}</span>
         </div>
+<div class="info">
+  <mat-icon>payments</mat-icon>
+  <span>{{ ev.valor > 0 ? (ev.valor | currency:'BRL') : 'Gratuito' }}</span>
+</div>
 
         <p class="descricao" *ngIf="ev.descricao">{{ ev.descricao }}</p>
       </mat-card-content>

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Evento } from '../../shared/navbar/evento.model';
+import { EventoService } from '../../shared/navbar/evento.service';
 
 @Component({
   selector: 'app-meus-eventos',
@@ -8,13 +10,21 @@ import { Component } from '@angular/core';
 })
 export class MeusEventos {
 
-  meusEventos: any[] = JSON.parse(localStorage.getItem('eventos') || '[]');
+  meusEventos: Evento[] = [];
+
+  constructor(private eventoService: EventoService) {
+    this.carregar();
+  }
+
+  carregar() {
+    this.meusEventos = this.eventoService.listar();
+  }
 
   excluir(id: number) {
     if (!confirm('Deseja excluir este evento?')) {
       return;
     }
-    this.meusEventos = this.meusEventos.filter(e => e.id !== id);
-    localStorage.setItem('eventos', JSON.stringify(this.meusEventos));
+    this.eventoService.excluir(id);
+    this.carregar();
   }
 }

@@ -1,27 +1,42 @@
 <section class="busca">
   <h1>Encontre experiências perto de você</h1>
+
   <div class="busca-barra">
-    <input type="text" placeholder="Buscar experiências" [(ngModel)]="busca" />
-    <span class="local">📍 {{ local }}</span>
-    <button class="btn-buscar">Buscar</button>
+    <input type="text" placeholder="Buscar eventos por nome" [(ngModel)]="busca" />
+  </div>
+
+  <div class="filtros">
+    <input type="text" placeholder="Local ou cidade" [(ngModel)]="local" />
+    <input type="date" [(ngModel)]="data" />
+    <select [(ngModel)]="categoria">
+      <option value="">Todas as categorias</option>
+      <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+    </select>
+    <button class="btn-limpar" (click)="limpar()">Limpar filtros</button>
   </div>
 </section>
 
 <section class="secao">
-  <h2>Eventos em destaque</h2>
+  <h2>Eventos disponíveis</h2>
 
-  <div class="grade" *ngIf="eventosFiltrados.length; else vazio">
+  <div class="grade" *ngIf="eventosFiltrados.length > 0; else vazio">
     <article class="card" *ngFor="let e of eventosFiltrados">
-      <img [src]="e.imagem" [alt]="e.titulo" />
+      <div class="card-capa">
+        <mat-icon>event</mat-icon>
+      </div>
       <div class="card-corpo">
+        <span class="categoria">{{ e.categoria }}</span>
         <h3>{{ e.titulo }}</h3>
-        <p>{{ e.cidade }}</p>
-        <small>{{ e.data }}</small>
+        <p>{{ e.local }}</p>
+        <small>{{ e.data | date:'dd/MM/yyyy HH:mm' }}</small>
+        <div class="preco">{{ e.valor > 0 ? (e.valor | currency:'BRL') : 'Gratuito' }}</div>
       </div>
     </article>
   </div>
 
   <ng-template #vazio>
-    <p class="vazio">Nenhum evento encontrado.</p>
+    <p class="vazio">
+      {{ eventos.length === 0 ? 'Ainda não há eventos publicados.' : 'Nenhum evento encontrado com esses filtros.' }}
+    </p>
   </ng-template>
 </section>
