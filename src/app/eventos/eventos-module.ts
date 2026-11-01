@@ -15,9 +15,10 @@ import { CriarEvento } from './criar-evento/criar-evento';
 import { MeusEventos } from './meus-eventos/meus-eventos';
 import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 import { Home } from './home/home';
+import { DetalheEvento } from './detalhe-evento/detalhe-evento';
 
 @NgModule({
-  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos, Home],
+  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos, Home, DetalheEvento],
   imports: [
     CommonModule,
     MatIconModule,

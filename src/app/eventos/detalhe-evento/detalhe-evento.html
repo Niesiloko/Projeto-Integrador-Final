@@ -1,0 +1,45 @@
+<div class="page-container">
+  <ng-container *ngIf="evento; else naoEncontrado">
+    <mat-card appearance="outlined" class="detalhe-card">
+      <div class="capa">
+        <img *ngIf="evento.imagem; else icone" [src]="evento.imagem" [alt]="evento.titulo" />
+        <ng-template #icone><mat-icon>event</mat-icon></ng-template>
+      </div>
+
+      <div class="conteudo">
+        <span class="categoria">{{ evento.categoria }}</span>
+        <h1>{{ evento.titulo }}</h1>
+
+        <div class="info">
+          <mat-icon>event</mat-icon>
+          <span>{{ evento.data | date:'dd/MM/yyyy' }} às {{ evento.data | date:'HH:mm' }}</span>
+        </div>
+
+        <div class="info">
+          <mat-icon>place</mat-icon>
+          <span>{{ evento.local }}</span>
+        </div>
+
+        <p class="descricao" *ngIf="evento.descricao">{{ evento.descricao }}</p>
+
+        <div class="compra">
+          <div class="preco">
+            <small>Valor do ingresso</small>
+            <strong>{{ evento.valor > 0 ? (evento.valor | currency:'BRL') : 'Gratuito' }}</strong>
+          </div>
+
+          <button mat-flat-button class="btn-primary-sympla" (click)="comprar()">
+            Comprar ingresso
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+
+  <ng-template #naoEncontrado>
+    <div class="vazio">
+      <p>Evento não encontrado.</p>
+      <a routerLink="/">Voltar para a Home</a>
+    </div>
+  </ng-template>
+</div>

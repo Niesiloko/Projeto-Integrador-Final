@@ -14,4 +14,5 @@ export interface Ingresso {
   titular: string;
   valor: number;
   status: StatusIngresso;
+  compradorEmail: string;
 }

@@ -1,0 +1,116 @@
+$laranja: #ff5500;
+$laranja-escuro: #d94800;
+$laranja-claro: #fff1e8;
+$branco: #ffffff;
+$cinza-texto: #4a5568;
+$cinza-claro: #718096;
+$texto-escuro: #1a202c;
+
+.page-container {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.detalhe-card {
+  padding: 0 !important;
+  background: $branco !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.capa {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $laranja, #ff8a4c);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  mat-icon {
+    color: $branco;
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.conteudo {
+  padding: 24px;
+
+  h1 {
+    margin: 12px 0 16px;
+    color: $texto-escuro;
+  }
+}
+
+.categoria {
+  display: inline-block;
+  background: $laranja-claro;
+  color: $laranja-escuro;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: $texto-escuro;
+  font-weight: 500;
+
+  mat-icon { color: $laranja; }
+}
+
+.descricao {
+  margin: 16px 0;
+  color: $cinza-texto;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.compra {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px dashed #e2e8f0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  .preco {
+    display: flex;
+    flex-direction: column;
+
+    small { color: $cinza-claro; }
+    strong { font-size: 24px; color: $laranja-escuro; }
+  }
+}
+
+.btn-primary-sympla {
+  background-color: $laranja !important;
+  color: $branco !important;
+  border-radius: 24px;
+  padding: 0 28px;
+
+  &:hover { background-color: $laranja-escuro !important; }
+}
+
+.vazio {
+  text-align: center;
+  padding: 48px 16px;
+  color: $cinza-texto;
+
+  a { color: $laranja-escuro; }
+}

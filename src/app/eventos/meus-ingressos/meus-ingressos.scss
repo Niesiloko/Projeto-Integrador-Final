@@ -129,3 +129,31 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   margin-top: 6px;
   color: $cinza-texto;
 }
+
+.qrcode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 16px;
+  background: $cinza-fundo;
+  border-radius: 8px;
+
+  img {
+    width: 160px;
+    height: 160px;
+    border-radius: 8px;
+    background: $branco;
+  }
+
+  small { color: $cinza-claro; word-break: break-all; text-align: center; }
+  span { color: $cinza-texto; font-weight: 500; }
+}
+
+.btn-reembolso {
+  margin-top: 4px;
+  color: #c53030 !important;
+  border-color: #c53030 !important;
+  border-radius: 24px;
+}

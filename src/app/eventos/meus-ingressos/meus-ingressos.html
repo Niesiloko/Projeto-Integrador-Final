@@ -15,7 +15,7 @@
           <mat-icon>event</mat-icon>
           <div>
             <small>Data</small>
-            <span>{{ ing.data }}</span>
+           <span>{{ ing.data | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
         </div>
 
@@ -35,10 +35,22 @@
           </div>
         </div>
 
-        <div class="qrcode-placeholder">
-          <mat-icon>qr_code</mat-icon>
-          <span>Apresente na entrada</span>
-        </div>
+        <div class="qrcode" *ngIf="valido(ing); else invalido">
+  <img *ngIf="qrs[ing.id]" [src]="qrs[ing.id]" alt="QR Code do ingresso" />
+  <small>{{ ing.codigo }}</small>
+  <span>Apresente na entrada</span>
+</div>
+
+<ng-template #invalido>
+  <div class="qrcode-placeholder">
+    <mat-icon>block</mat-icon>
+    <span>QR Code indisponível ({{ rotulo(ing.status) }})</span>
+  </div>
+</ng-template>
+
+<button mat-stroked-button class="btn-reembolso" *ngIf="ing.status === 'CONFIRMADO'" (click)="reembolsar(ing)">
+  Solicitar reembolso
+</button>
       </mat-card-content>
     </mat-card>
   </div>

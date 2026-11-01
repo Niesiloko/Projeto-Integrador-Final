@@ -14,30 +14,54 @@ export class IngressoService {
     localStorage.setItem(this.chave, JSON.stringify(lista));
   }
 
+private prazoReembolsoDias = 7;
 
-  comprar(evento: Evento, titular: string): Ingresso {
-    const id = Date.now();
-    const ingresso: Ingresso = {
-      id,
-      codigo: `CE-${evento.id}-${id}`,
-      eventoId: evento.id,
-      eventoNome: evento.titulo,
-      data: evento.data,
-      local: evento.local,
-      titular,
-      valor: evento.valor,
-      status: 'CONFIRMADO'
+listarDoUsuario(email: string): Ingresso[] {
+  return this.listar().filter(i => i.compradorEmail === email);
+}
+
+
+comprar(evento: Evento, titular: string, email: string): Ingresso {
+  const id = Date.now();
+  const ingresso: Ingresso = {
+    id,
+    codigo: `CE-${evento.id}-${id}`,
+    eventoId: evento.id,
+    eventoNome: evento.titulo,
+    data: evento.data,
+    local: evento.local,
+    titular,
+    compradorEmail: email,
+    valor: evento.valor,
+    status: 'CONFIRMADO'
+  };
+  const lista = this.listar();
+  lista.push(ingresso);
+  this.gravar(lista);
+  return ingresso;
+}
+
+
+solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
+  const lista = this.listar();
+  const ingresso = lista.find(i => i.id === id);
+
+  if (!ingresso || ingresso.status !== 'CONFIRMADO') {
+    return { ok: false, mensagem: 'Este ingresso não pode ser reembolsado.' };
+  }
+
+  const diasAteEvento = (new Date(ingresso.data).getTime() - Date.now()) / 86400000;
+  if (diasAteEvento < this.prazoReembolsoDias) {
+    return {
+      ok: false,
+      mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoDias} dias antes do evento.`
     };
-    const lista = this.listar();
-    lista.push(ingresso);
-    this.gravar(lista);
-    return ingresso;
   }
 
-  solicitarReembolso(id: number) {
-    this.atualizarStatus(id, 'REEMBOLSO_SOLICITADO');
-  }
-
+  ingresso.status = 'REEMBOLSO_SOLICITADO';
+  this.gravar(lista);
+  return { ok: true, mensagem: 'Reembolso solicitado. Aguarde a aprovação do organizador.' };
+}
 
   aprovarReembolso(id: number) {
     this.atualizarStatus(id, 'REEMBOLSADO');
