@@ -113,7 +113,7 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   color: $cinza-texto;
   line-height: 1.5;
 
-  // limita a 3 linhas e coloca "..." no final
+  
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
