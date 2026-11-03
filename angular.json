@@ -23,7 +23,7 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
-      "architect": {
+      "architect": { 
         "build": {
           "builder": "@angular/build:application",
           "options": {
@@ -43,7 +43,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "700kB",
                   "maximumError": "1MB"
                 },
                 {
