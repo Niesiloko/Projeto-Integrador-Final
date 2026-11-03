@@ -14,7 +14,7 @@ export class IngressoService {
     localStorage.setItem(this.chave, JSON.stringify(lista));
   }
 
-private prazoReembolsoDias = 7;
+private prazoReembolsoHoras = 48;
 
 listarDoUsuario(email: string): Ingresso[] {
   return this.listar().filter(i => i.compradorEmail === email);
@@ -57,10 +57,10 @@ solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
   }
 
   const diasAteEvento = (new Date(ingresso.data).getTime() - Date.now()) / 86400000;
-  if (diasAteEvento < this.prazoReembolsoDias) {
+  if (diasAteEvento < this.prazoReembolsoHoras) {
     return {
       ok: false,
-      mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoDias} dias antes do evento.`
+      mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoHoras} Horas antes do evento.`
     };
   }
 
@@ -102,5 +102,5 @@ solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
     }
   }
   
-  
+
 }
