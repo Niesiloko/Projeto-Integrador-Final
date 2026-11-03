@@ -5,6 +5,7 @@ import { Ingresso } from './ingresso.model';
 @Injectable({ providedIn: 'root' })
 export class IngressoService {
   private chave = 'ingressos';
+  private prazoReembolsoHoras = 48;
 
   listar(): Ingresso[] {
     return JSON.parse(localStorage.getItem(this.chave) || '[]');
@@ -14,62 +15,57 @@ export class IngressoService {
     localStorage.setItem(this.chave, JSON.stringify(lista));
   }
 
-private prazoReembolsoHoras = 48;
-
-listarDoUsuario(email: string): Ingresso[] {
-  return this.listar().filter(i => i.compradorEmail === email);
-}
-
-// verdadeiro se o usuário já tem um ingresso válido deste evento
-jaComprou(eventoId: number, email: string): boolean {
-  return this.listarDoUsuario(email).some(
-    i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO'
-  );
-}
-
-comprar(evento: Evento, titular: string, email: string): Ingresso {
-  const id = Date.now();
-  const ingresso: Ingresso = {
-    id,
-    codigo: `CE-${evento.id}-${id}`,
-    eventoId: evento.id,
-    eventoNome: evento.titulo,
-    data: evento.data,
-    local: evento.local,
-    titular,
-    compradorEmail: email,
-    valor: evento.valor,
-    status: 'CONFIRMADO'
-  };
-  const lista = this.listar();
-  lista.push(ingresso);
-  this.gravar(lista);
-  return ingresso;
-}
-
-
-solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
-  const lista = this.listar();
-  const ingresso = lista.find(i => i.id === id);
-
-  if (!ingresso || ingresso.status !== 'CONFIRMADO') {
-    return { ok: false, mensagem: 'Este ingresso não pode ser reembolsado.' };
+  listarDoUsuario(email: string): Ingresso[] {
+    return this.listar().filter(i => i.compradorEmail === email);
   }
 
-  const diasAteEvento = (new Date(ingresso.data).getTime() - Date.now()) / 86400000;
-  if (diasAteEvento < this.prazoReembolsoHoras) {
-    return {
-      ok: false,
-      mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoHoras} Horas antes do evento.`
+  // verdadeiro se o usuário já tem um ingresso válido deste evento
+  jaComprou(eventoId: number, email: string): boolean {
+    return this.listarDoUsuario(email).some(
+      i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO'
+    );
+  }
+
+  comprar(evento: Evento, titular: string, email: string): Ingresso {
+    const id = Date.now();
+    const ingresso: Ingresso = {
+      id,
+      codigo: `CE-${evento.id}-${id}`,
+      eventoId: evento.id,
+      eventoNome: evento.titulo,
+      data: evento.data,
+      local: evento.local,
+      titular,
+      compradorEmail: email,
+      valor: evento.valor,
+      status: 'CONFIRMADO'
     };
+    const lista = this.listar();
+    lista.push(ingresso);
+    this.gravar(lista);
+    return ingresso;
   }
 
+  solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
+    const lista = this.listar();
+    const ingresso = lista.find(i => i.id === id);
 
-  
-  ingresso.status = 'REEMBOLSO_SOLICITADO';
-  this.gravar(lista);
-  return { ok: true, mensagem: 'Reembolso solicitado. Aguarde a aprovação do organizador.' };
-}
+    if (!ingresso || ingresso.status !== 'CONFIRMADO') {
+      return { ok: false, mensagem: 'Este ingresso não pode ser reembolsado.' };
+    }
+
+    const horasAteEvento = (new Date(ingresso.data).getTime() - Date.now()) / 3600000;
+    if (horasAteEvento < this.prazoReembolsoHoras) {
+      return {
+        ok: false,
+        mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoHoras} horas antes do início do evento.`
+      };
+    }
+
+    ingresso.status = 'REEMBOLSO_SOLICITADO';
+    this.gravar(lista);
+    return { ok: true, mensagem: 'Reembolso solicitado. Aguarde a aprovação do organizador.' };
+  }
 
   aprovarReembolso(id: number) {
     this.atualizarStatus(id, 'REEMBOLSADO');
@@ -101,6 +97,4 @@ solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
       this.gravar(lista);
     }
   }
-  
-
 }
