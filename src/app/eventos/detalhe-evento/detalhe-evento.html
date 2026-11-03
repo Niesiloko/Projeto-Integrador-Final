@@ -28,9 +28,18 @@
             <strong>{{ evento.valor > 0 ? (evento.valor | currency:'BRL') : 'Gratuito' }}</strong>
           </div>
 
-          <button mat-flat-button class="btn-primary-sympla" (click)="comprar()">
+                   <button mat-flat-button class="btn-primary-sympla" *ngIf="!jaComprado; else comprado" (click)="comprar()">
             Comprar ingresso
           </button>
+
+          <ng-template #comprado>
+            <div class="comprado">
+              <span class="selo-comprado">
+                <mat-icon>check_circle</mat-icon> Ingresso comprado
+              </span>
+              <a mat-stroked-button class="btn-ver" routerLink="/eventos/meus-ingressos">Ver meu ingresso</a>
+            </div>
+          </ng-template>
         </div>
       </div>
     </mat-card>

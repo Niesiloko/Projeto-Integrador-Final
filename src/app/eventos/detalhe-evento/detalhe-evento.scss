@@ -114,3 +114,27 @@ $texto-escuro: #1a202c;
 
   a { color: $laranja-escuro; }
 }
+
+.comprado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.selo-comprado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6f6ec;
+  color: #2f855a;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 24px;
+}
+
+.btn-ver {
+  color: $laranja-escuro !important;
+  border-color: $laranja !important;
+  border-radius: 24px;
+}

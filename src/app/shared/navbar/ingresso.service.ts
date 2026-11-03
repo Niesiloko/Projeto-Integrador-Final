@@ -20,6 +20,12 @@ listarDoUsuario(email: string): Ingresso[] {
   return this.listar().filter(i => i.compradorEmail === email);
 }
 
+// verdadeiro se o usuário já tem um ingresso válido deste evento
+jaComprou(eventoId: number, email: string): boolean {
+  return this.listarDoUsuario(email).some(
+    i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO'
+  );
+}
 
 comprar(evento: Evento, titular: string, email: string): Ingresso {
   const id = Date.now();
@@ -58,6 +64,8 @@ solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
     };
   }
 
+
+  
   ingresso.status = 'REEMBOLSO_SOLICITADO';
   this.gravar(lista);
   return { ok: true, mensagem: 'Reembolso solicitado. Aguarde a aprovação do organizador.' };
@@ -93,4 +101,6 @@ solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
       this.gravar(lista);
     }
   }
+  
+  
 }

@@ -14,6 +14,7 @@ import { AuthService } from '../../shared/auth.service';
 export class DetalheEvento {
 
   evento?: Evento;
+  jaComprado = false;
 
   constructor(
     route: ActivatedRoute,
@@ -24,6 +25,16 @@ export class DetalheEvento {
   ) {
     const id = Number(route.snapshot.paramMap.get('id'));
     this.evento = this.eventoService.buscarPorId(id);
+    this.atualizarCompra();
+  }
+
+  private atualizarCompra() {
+    const usuario = this.auth.usuarioLogado;
+    this.jaComprado = !!(
+      this.evento &&
+      usuario &&
+      this.ingressoService.jaComprou(this.evento.id, usuario.email)
+    );
   }
 
   comprar() {
@@ -37,7 +48,6 @@ export class DetalheEvento {
       return;
     }
     this.ingressoService.comprar(this.evento, usuario.nome, usuario.email);
-    alert('Compra confirmada! Seu ingresso está em Meus Ingressos.');
-    this.router.navigate(['/eventos/meus-ingressos']);
+    this.atualizarCompra();
   }
 }
