@@ -1,34 +1,74 @@
-<mat-toolbar color="primary" class="sympla-toolbar">
-  <span class="logo" routerLink="/">Conecta<strong>Event</strong></span>
+<mat-sidenav-container class="estrutura">
 
-  <span class="spacer"></span>
+  <mat-sidenav #menu class="menu-lateral"
+    [mode]="(telaPequena$ | async) ? 'over' : 'side'"
+    [opened]="!(telaPequena$ | async)"
+    aria-label="Menu principal">
 
-  <button mat-button routerLink="/">
-    <mat-icon>home</mat-icon> Home
-  </button>
+    <div class="marca">
+      <span class="logo">Conecta<strong>Event</strong></span>
+    </div>
 
-  <button mat-button routerLink="/eventos/criar-evento">
-    <mat-icon>add_circle_outline</mat-icon> Criar evento
-  </button>
+    <div class="rotulo-menu">NAVEGAÇÃO</div>
 
-  <button mat-button routerLink="/eventos/meus-eventos">
-    <mat-icon>event</mat-icon> Meus eventos
-  </button>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="item-ativo"
+         [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Home</span>
+      </a>
 
-  <button mat-button routerLink="/eventos/meus-ingressos">
-    <mat-icon>confirmation_number</mat-icon> Meus ingressos
-  </button>
+      <a mat-list-item routerLink="/eventos/criar-evento" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>add_circle_outline</mat-icon>
+        <span matListItemTitle>Criar evento</span>
+      </a>
 
-  <button mat-button routerLink="/login" class="btn-login" *ngIf="!auth.estaLogado">
-    <mat-icon>account_circle</mat-icon> Entrar
-  </button>
+      <a mat-list-item routerLink="/eventos/meus-eventos" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>event</mat-icon>
+        <span matListItemTitle>Meus eventos</span>
+      </a>
 
-  <ng-container *ngIf="auth.estaLogado">
-    <span class="usuario">
-      <mat-icon>account_circle</mat-icon> {{ auth.usuarioLogado?.nome }}
-    </span>
-    <button mat-button (click)="sair()">
-      <mat-icon>logout</mat-icon> Sair
-    </button>
-  </ng-container>
-</mat-toolbar>
+      <a mat-list-item routerLink="/eventos/meus-ingressos" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>confirmation_number</mat-icon>
+        <span matListItemTitle>Meus ingressos</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="rodape-menu">Projeto Integrador IV</div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="area-principal">
+    <mat-toolbar class="topo">
+      <button mat-icon-button type="button" (click)="menu.toggle()" aria-label="Abrir ou fechar menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="titulo-topo" routerLink="/">Conecta<strong>Event</strong></span>
+      <span class="spacer"></span>
+
+      <ng-container *ngIf="auth.estaLogado; else entrar">
+        <span class="usuario">
+          <mat-icon>account_circle</mat-icon> {{ auth.usuarioLogado?.nome }}
+        </span>
+        <button mat-button (click)="sair()">
+          <mat-icon>logout</mat-icon> Sair
+        </button>
+      </ng-container>
+
+      <ng-template #entrar>
+        <button mat-button routerLink="/login">
+          <mat-icon>account_circle</mat-icon> Entrar
+        </button>
+      </ng-template>
+    </mat-toolbar>
+
+    <main class="conteudo">
+      <!-- as telas aparecem aqui -->
+      <ng-content></ng-content>
+    </main>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
