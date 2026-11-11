@@ -1,0 +1,2009 @@
+{
+  "info": {
+    "name": "Conecta Event - API",
+    "description": "Coleção de testes do backend do Conecta Event (Projeto Integrador - UniFIO).\n\nExecute as pastas NA ORDEM, logo após iniciar a aplicação (o banco é recriado a cada início e os ids citados contam com os dados do import.sql).\n\nUsuários de teste (HTTP Basic): organizador / organizador123 (ORGANIZADOR) e participante / participante123 (PARTICIPANTE).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{organizadorUsuario}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{organizadorSenha}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "organizadorUsuario",
+      "value": "organizador"
+    },
+    {
+      "key": "organizadorSenha",
+      "value": "organizador123"
+    },
+    {
+      "key": "participanteUsuario",
+      "value": "participante"
+    },
+    {
+      "key": "participanteSenha",
+      "value": "participante123"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Autenticação e autorização",
+      "description": "Diferença entre 401 e 403.",
+      "item": [
+        {
+          "name": "Listar categorias autenticado como organizador (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar categorias autenticado como participante (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{participanteUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{participanteSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar categorias sem autenticação (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar categorias com senha errada (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "senha-errada",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Participante tenta criar categoria (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{participanteUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{participanteSenha}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Gastronomia\",\n  \"descricao\": \"Festivais e feiras gastronômicas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Categorias",
+      "description": "CRUD de categorias (organizador).",
+      "item": [
+        {
+          "name": "Listar categorias (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar categoria por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar categoria (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Gastronomia\",\n  \"descricao\": \"Festivais e feiras gastronômicas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar categoria criada - id 6 (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "6"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Gastronomia\",\n  \"descricao\": \"Festivais, feiras e degustações\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir categoria criada - id 6 (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar categoria com nome vazio (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"\",\n  \"descricao\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar categoria com nome repetido (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Música\",\n  \"descricao\": \"Repetida\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: excluir categoria com eventos (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar categoria inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Usuários",
+      "description": "CRUD de usuários e consulta por perfil (organizador).",
+      "item": [
+        {
+          "name": "Listar usuários (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: usuários por perfil (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios?perfil=ORGANIZADOR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "perfil",
+                  "value": "ORGANIZADOR"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar usuário por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar usuário (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Fernanda Alves\",\n  \"email\": \"fernanda@email.com\",\n  \"perfil\": \"PARTICIPANTE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar usuário criado - id 6 (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "6"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Fernanda Alves Costa\",\n  \"email\": \"fernanda@email.com\",\n  \"perfil\": \"PARTICIPANTE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir usuário criado - id 6 (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar usuário com e-mail inválido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Teste\",\n  \"email\": \"nao-e-email\",\n  \"perfil\": \"PARTICIPANTE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar usuário com e-mail já cadastrado (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Outra Carla\",\n  \"email\": \"carla@email.com\",\n  \"perfil\": \"PARTICIPANTE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar usuário com perfil inexistente (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Teste\",\n  \"email\": \"teste@email.com\",\n  \"perfil\": \"ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: excluir usuário que organiza eventos (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar usuário inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Eventos",
+      "description": "CRUD de eventos, consultas e regras (organizador).",
+      "item": [
+        {
+          "name": "Listar eventos (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: eventos futuros (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/futuros",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "futuros"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: eventos por categoria (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos?categoriaId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ],
+              "query": [
+                {
+                  "key": "categoriaId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: eventos por título (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos?titulo=rock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ],
+              "query": [
+                {
+                  "key": "titulo",
+                  "value": "rock"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: eventos de um organizador (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/1/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "1",
+                "eventos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar evento por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Vagas do evento esgotado - id 4 (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/4/vagas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "4",
+                "vagas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar evento (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Palestra de Spring Boot\",\n  \"descricao\": \"Introdução a APIs REST com Spring Boot.\",\n  \"dataHora\": \"2027-06-20T19:00:00\",\n  \"local\": \"Auditório - UniFIO\",\n  \"valor\": 30,\n  \"capacidade\": 80,\n  \"imagem\": null,\n  \"categoria\": {\n    \"id\": 2\n  },\n  \"organizador\": {\n    \"id\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar evento criado - id 6 (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "6"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Palestra de Spring Boot\",\n  \"descricao\": \"Introdução a APIs REST com Spring Boot.\",\n  \"dataHora\": \"2027-06-20T19:00:00\",\n  \"local\": \"Auditório - UniFIO\",\n  \"valor\": 20,\n  \"capacidade\": 120,\n  \"imagem\": null,\n  \"categoria\": {\n    \"id\": 2\n  },\n  \"organizador\": {\n    \"id\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir evento criado - id 6 (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar evento com dados inválidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"\",\n  \"descricao\": \"Introdução a APIs REST com Spring Boot.\",\n  \"dataHora\": \"2020-01-01T10:00:00\",\n  \"local\": \"Auditório - UniFIO\",\n  \"valor\": -5,\n  \"capacidade\": 0,\n  \"imagem\": null,\n  \"categoria\": {\n    \"id\": 2\n  },\n  \"organizador\": {\n    \"id\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: evento com organizador sem perfil ORGANIZADOR (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Palestra de Spring Boot\",\n  \"descricao\": \"Introdução a APIs REST com Spring Boot.\",\n  \"dataHora\": \"2027-06-20T19:00:00\",\n  \"local\": \"Auditório - UniFIO\",\n  \"valor\": 30,\n  \"capacidade\": 80,\n  \"imagem\": null,\n  \"categoria\": {\n    \"id\": 2\n  },\n  \"organizador\": {\n    \"id\": 3\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: capacidade menor que ingressos vendidos (409)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Workshop de Angular\",\n  \"descricao\": \"Oficina prática de Angular com Material.\",\n  \"dataHora\": \"2027-06-20T19:00:00\",\n  \"local\": \"Laboratório 3 - UniFIO\",\n  \"valor\": 50,\n  \"capacidade\": 1,\n  \"imagem\": null,\n  \"categoria\": {\n    \"id\": 5\n  },\n  \"organizador\": {\n    \"id\": 2\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: excluir evento com ingressos (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar evento inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar evento com id inválido (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Ingressos (compra e check-in)",
+      "description": "Funcionalidade do PI: compra com controle de participantes.",
+      "item": [
+        {
+          "name": "Comprar ingresso (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 3\n  },\n  \"titular\": \"Carla Mendes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: comprar de novo para o mesmo evento (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 3\n  },\n  \"titular\": \"Carla Mendes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: comprar para evento esgotado (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 4\n  },\n  \"participante\": {\n    \"id\": 3\n  },\n  \"titular\": \"Carla Mendes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comprar sem titular (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comprar para evento inexistente (404)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 999\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"Diego Ramos\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Organizador tenta comprar ingresso (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"Diego Ramos\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar ingressos (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar ingresso por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: ingressos de um participante (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/3/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "3",
+                "ingressos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: participantes confirmados de um evento (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/4/ingressos?status=CONFIRMADO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "4",
+                "ingressos"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CONFIRMADO"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar titular do ingresso (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 1\n  },\n  \"participante\": {\n    \"id\": 3\n  },\n  \"titular\": \"Carla Mendes da Silva\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir ingresso comprado - id 7 (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check-in na entrada (200)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/check-in/CE-ROCK0002",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "check-in",
+                "CE-ROCK0002"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: check-in de ingresso já utilizado (409)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/check-in/CE-ROCK0002",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "check-in",
+                "CE-ROCK0002"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check-in com código inexistente (404)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/check-in/CE-NAOEXISTE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "check-in",
+                "CE-NAOEXISTE"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Participante tenta fazer check-in (403)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos/check-in/CE-ROCK0001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos",
+                "check-in",
+                "CE-ROCK0001"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{participanteUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{participanteSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "basic",
+        "basic": [
+          {
+            "key": "username",
+            "value": "{{participanteUsuario}}",
+            "type": "string"
+          },
+          {
+            "key": "password",
+            "value": "{{participanteSenha}}",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "06 - Reembolsos",
+      "description": "Pedido pelo participante e decisão pelo organizador.",
+      "item": [
+        {
+          "name": "Solicitar reembolso (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 1\n  },\n  \"motivo\": \"Tive um imprevisto de saúde na família.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: reembolso a menos de 48h do evento (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 2\n  },\n  \"motivo\": \"Não vou conseguir ir à corrida.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: reembolso de ingresso já utilizado (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 6\n  },\n  \"motivo\": \"Quero meu dinheiro de volta.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Solicitar reembolso com motivo curto (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 3\n  },\n  \"motivo\": \"a\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reembolsos (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: reembolsos pendentes (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos?status=PENDENTE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDENTE"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta: reembolsos pendentes dos eventos do organizador 1 (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/1/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "1",
+                "reembolsos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar reembolso por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar motivo do reembolso (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 1\n  },\n  \"motivo\": \"Imprevisto de saúde na família; não poderei viajar.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Participante tenta aprovar reembolso (403)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2",
+                "aprovar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Organizador aprova reembolso (200)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2",
+                "aprovar"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: aprovar reembolso já decidido (409)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2",
+                "aprovar"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Organizador recusa reembolso (200)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/1/recusar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "1",
+                "recusar"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Solicitar reembolso para depois desistir (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 3\n  },\n  \"motivo\": \"Conflito de horário com uma prova.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir (desistir do) reembolso - id 3 (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar reembolso inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "basic",
+        "basic": [
+          {
+            "key": "username",
+            "value": "{{participanteUsuario}}",
+            "type": "string"
+          },
+          {
+            "key": "password",
+            "value": "{{participanteSenha}}",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}
