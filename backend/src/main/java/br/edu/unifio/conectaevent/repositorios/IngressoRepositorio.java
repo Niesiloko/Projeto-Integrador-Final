@@ -27,6 +27,9 @@ public interface IngressoRepositorio extends JpaRepository<Ingresso, Integer> {
     boolean existsByEventoIdAndParticipanteIdAndStatusIn(Integer eventoId, Integer participanteId,
             Collection<StatusIngresso> status);
 
+    // Quantas vezes o participante já foi reembolsado neste evento (limite de recompra).
+    long countByEventoIdAndParticipanteIdAndStatus(Integer eventoId, Integer participanteId, StatusIngresso status);
+
     boolean existsByEventoId(Integer eventoId);
 
     boolean existsByParticipanteId(Integer participanteId);

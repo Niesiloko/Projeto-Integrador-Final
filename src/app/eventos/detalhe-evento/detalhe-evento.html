@@ -26,13 +26,20 @@
           <div class="preco">
             <small>Valor do ingresso</small>
             <strong>{{ evento.valor > 0 ? (evento.valor | currency:'BRL') : 'Gratuito' }}</strong>
+            <small class="vagas" *ngIf="!encerrado && !esgotado">
+              {{ vagasRestantes }} {{ vagasRestantes === 1 ? 'vaga restante' : 'vagas restantes' }}
+            </small>
           </div>
 
           <span class="selo-encerrado" *ngIf="encerrado && !jaComprado">
             <mat-icon>event_busy</mat-icon> Evento encerrado
           </span>
 
-          <div class="selo-bloqueado" *ngIf="bloqueado && !encerrado" role="status">
+          <span class="selo-encerrado" *ngIf="esgotado && !encerrado && !jaComprado">
+            <mat-icon>do_not_disturb_on</mat-icon> Ingressos esgotados
+          </span>
+
+          <div class="selo-bloqueado" *ngIf="bloqueado && !encerrado && !esgotado" role="status">
             <mat-icon>block</mat-icon>
             <span>
               Compra indisponível: você já efetuou {{ ingressoService.limiteReembolsosPorEvento }} reembolsos
@@ -40,7 +47,7 @@
             </span>
           </div>
 
-          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado && !bloqueado" (click)="comprar()">
+          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado && !bloqueado && !esgotado" (click)="comprar()">
             Comprar ingresso
           </button>
 

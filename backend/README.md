@@ -14,7 +14,7 @@ O front-end em Angular fica na raiz deste repositório. Esta pasta (`backend/`) 
 Oferecer uma API REST que guarda os dados do Conecta Event num banco MySQL e aplica as regras do negócio:
 
 - controle de capacidade na compra de ingressos (inscrição e controle de participantes);
-- um ingresso por pessoa por evento;
+- um ingresso por pessoa por evento, e no máximo 2 reembolsos por pessoa no mesmo evento;
 - reembolso integral até 48 horas antes do evento, com aprovação do organizador;
 - check-in do ingresso na entrada do evento;
 - acesso separado por perfil (organizador e participante).

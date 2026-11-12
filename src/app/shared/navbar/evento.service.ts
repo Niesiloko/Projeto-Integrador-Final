@@ -21,7 +21,8 @@ export class EventoService {
         delete e.categoria;
         migrou = true;
       }
-      return { ...e, valor: e.valor ?? 0 };
+      // eventos criados antes do campo capacidade recebem 100 vagas
+      return { ...e, valor: e.valor ?? 0, capacidade: e.capacidade ?? 100 };
     });
 
     if (migrou) {

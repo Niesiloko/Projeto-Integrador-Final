@@ -151,6 +151,7 @@ No `PUT`, o corpo é o mesmo, mas só o `titular` é alterado.
 |---|---|---|
 | Não vender ingresso além da capacidade do evento | `IngressoServico.comprar` | 409 |
 | Um ingresso válido por participante por evento | `IngressoServico.comprar` | 409 |
+| No máximo 2 reembolsos por participante no mesmo evento; depois disso, a compra é bloqueada | `IngressoServico.comprar` | 409 |
 | Não vender ingresso de evento que já aconteceu | `IngressoServico.comprar` | 409 |
 | Reembolso só até 48 horas antes do evento, com devolução integral | `ReembolsoServico.solicitar` | 409 |
 | Só ingressos CONFIRMADOS podem pedir reembolso, e só um pedido por ingresso | `ReembolsoServico.solicitar` | 409 |

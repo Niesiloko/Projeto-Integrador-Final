@@ -239,4 +239,7 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   }
 
   .btn-aprovar { color: $laranja-escuro !important; }
+  .btn-recusar { color: $cinza-texto !important; }
+
+  .decisao { display: flex; }
 }

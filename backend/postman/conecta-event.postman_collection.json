@@ -11035,6 +11035,250 @@
           }
         ]
       }
+    },
+    {
+      "name": "07 - Limite de reembolsos",
+      "description": "Rode esta pasta SOZINHA, logo depois de reiniciar a API (os ids contam com o banco recém-criado). Diego compra e é reembolsado 2 vezes no mesmo evento; a 3ª compra é recusada.",
+      "auth": {
+        "type": "basic",
+        "basic": [
+          {
+            "key": "username",
+            "value": "{{participanteUsuario}}",
+            "type": "string"
+          },
+          {
+            "key": "password",
+            "value": "{{participanteSenha}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "1ª compra (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"Diego Ramos\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1º reembolso: solicitar (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 7\n  },\n  \"motivo\": \"Mudança de planos na semana do evento.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1º reembolso: organizador aprova (200)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/2/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "2",
+                "aprovar"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2ª compra, a recompra (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"Diego Ramos\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2º reembolso: solicitar (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ingresso\": {\n    \"id\": 8\n  },\n  \"motivo\": \"Não vou conseguir ir de novo.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2º reembolso: organizador aprova (200)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reembolsos/3/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reembolsos",
+                "3",
+                "aprovar"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{organizadorUsuario}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{organizadorSenha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Regra: 3ª compra após 2 reembolsos (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ingressos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingressos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": {\n    \"id\": 5\n  },\n  \"participante\": {\n    \"id\": 4\n  },\n  \"titular\": \"Diego Ramos\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "auth": {
