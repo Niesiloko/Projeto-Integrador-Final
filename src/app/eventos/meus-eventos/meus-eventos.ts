@@ -70,9 +70,9 @@ export class MeusEventos {
 
   // primeiro clique em Excluir: confere a regra e pede confirmação no cartão
   pedirExclusao(id: number) {
-    // evento com ingressos não pode sumir: os compradores perderiam o ingresso
-    if (this.ingressoService.existemDoEvento(id)) {
-      this.avisos[id] = 'Este evento já teve ingressos vendidos e não pode ser excluído.';
+    // evento com ingressos ativos não pode sumir: os compradores perderiam o ingresso
+    if (this.ingressoService.temIngressosAtivos(id)) {
+      this.avisos[id] = 'Este evento tem ingressos ativos (confirmados, com reembolso em análise ou utilizados) e não pode ser excluído.';
       return;
     }
     delete this.avisos[id];

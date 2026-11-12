@@ -19,8 +19,9 @@ export class IngressoService {
     return this.listar().filter(i => i.compradorEmail === email);
   }
 
-  existemDoEvento(eventoId: number): boolean {
-    return this.listar().some(i => i.eventoId === eventoId);
+  // ingresso reembolsado já foi devolvido e não conta; os demais ainda prendem o evento
+  temIngressosAtivos(eventoId: number): boolean {
+    return this.listar().some(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO');
   }
 
   // o ingresso guarda uma cópia do nome, da data e do local: atualiza quando o evento é editado
