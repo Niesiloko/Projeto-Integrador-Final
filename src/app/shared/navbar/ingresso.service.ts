@@ -7,6 +7,9 @@ export class IngressoService {
   private chave = 'ingressos';
   private prazoReembolsoHoras = 48;
 
+  // depois de 2 reembolsos no mesmo evento, a pessoa não pode mais comprar ingresso para ele
+  readonly limiteReembolsosPorEvento = 2;
+
   listar(): Ingresso[] {
     return JSON.parse(localStorage.getItem(this.chave) || '[]');
   }
@@ -42,7 +45,25 @@ export class IngressoService {
     );
   }
 
-  comprar(evento: Evento, titular: string, email: string): Ingresso {
+  // quantas vezes a pessoa já foi reembolsada (aprovado) neste evento
+  reembolsosNoEvento(eventoId: number, email: string): number {
+    return this.listarDoUsuario(email).filter(i => i.eventoId === eventoId && i.status === 'REEMBOLSADO').length;
+  }
+
+  // regra: comprar e reembolsar o mesmo evento repetidamente não é permitido
+  compraBloqueada(eventoId: number, email: string): boolean {
+    return this.reembolsosNoEvento(eventoId, email) >= this.limiteReembolsosPorEvento;
+  }
+
+  // verdadeiro se, aprovado este pedido, a pessoa chega ao limite e não poderá comprar de novo
+  ehUltimoReembolso(ingresso: Ingresso): boolean {
+    return this.reembolsosNoEvento(ingresso.eventoId, ingresso.compradorEmail) + 1 >= this.limiteReembolsosPorEvento;
+  }
+
+  comprar(evento: Evento, titular: string, email: string): Ingresso | undefined {
+    if (this.compraBloqueada(evento.id, email)) {
+      return undefined;
+    }
     const id = Date.now();
     const ingresso: Ingresso = {
       id,

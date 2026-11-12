@@ -133,6 +133,21 @@ $texto-escuro: #1a202c;
   font-weight: 600;
 }
 
+.selo-bloqueado {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 360px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #c53030;
+  font-size: 14px;
+  font-weight: 500;
+
+  mat-icon { flex-shrink: 0; }
+}
+
 .selo-comprado {
   display: inline-flex;
   align-items: center;

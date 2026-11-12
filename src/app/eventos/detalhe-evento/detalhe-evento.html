@@ -32,7 +32,15 @@
             <mat-icon>event_busy</mat-icon> Evento encerrado
           </span>
 
-          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado" (click)="comprar()">
+          <div class="selo-bloqueado" *ngIf="bloqueado && !encerrado" role="status">
+            <mat-icon>block</mat-icon>
+            <span>
+              Compra indisponível: você já foi reembolsado {{ ingressoService.limiteReembolsosPorEvento }} vezes
+              neste evento.
+            </span>
+          </div>
+
+          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado && !bloqueado" (click)="comprar()">
             Comprar ingresso
           </button>
 

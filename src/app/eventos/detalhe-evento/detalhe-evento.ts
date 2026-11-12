@@ -17,12 +17,13 @@ export class DetalheEvento {
   evento?: Evento;
   jaComprado = false;
   encerrado = false;
+  bloqueado = false;
 
   constructor(
     route: ActivatedRoute,
     private router: Router,
     private eventoService: EventoService,
-    private ingressoService: IngressoService,
+    public ingressoService: IngressoService,
     public categoriaService: CategoriaService,
     private auth: AuthService
   ) {
@@ -39,10 +40,16 @@ export class DetalheEvento {
       usuario &&
       this.ingressoService.jaComprou(this.evento.id, usuario.email)
     );
+    this.bloqueado = !!(
+      this.evento &&
+      usuario &&
+      !this.jaComprado &&
+      this.ingressoService.compraBloqueada(this.evento.id, usuario.email)
+    );
   }
 
   comprar() {
-    if (!this.evento || this.encerrado) {
+    if (!this.evento || this.encerrado || this.bloqueado) {
       return;
     }
     const usuario = this.auth.usuarioLogado;

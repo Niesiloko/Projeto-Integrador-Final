@@ -57,6 +57,10 @@
   <ng-template #confirmar>
     <div class="confirmacao">
       <span>Solicitar o reembolso deste ingresso?</span>
+      <small class="ultimo-aviso" *ngIf="ingressoService.ehUltimoReembolso(ing)">
+        Atenção: este é o seu último reembolso permitido neste evento. Se ele for aprovado,
+        você não poderá comprar ingresso para este evento de novo.
+      </small>
       <div>
         <button mat-button class="btn-nao" (click)="confirmandoReembolso = undefined">Não</button>
         <button mat-flat-button class="btn-sim" (click)="reembolsar(ing)">Sim, solicitar</button>
