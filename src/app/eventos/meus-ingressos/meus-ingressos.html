@@ -4,7 +4,7 @@
   <div class="tickets-grid">
     <mat-card appearance="outlined" *ngFor="let ing of ingressos" class="ticket-card">
       <div class="ticket-header">
-        <span class="badge">Confirmado</span>
+        <span class="badge" [class.badge-inativo]="!valido(ing)">{{ rotulo(ing.status) }}</span>
         <h3>{{ ing.eventoNome }}</h3>
       </div>
 
@@ -48,9 +48,24 @@
   </div>
 </ng-template>
 
-<button mat-stroked-button class="btn-reembolso" *ngIf="ing.status === 'CONFIRMADO'" (click)="reembolsar(ing)">
-  Solicitar reembolso
-</button>
+<ng-container *ngIf="ing.status === 'CONFIRMADO'">
+  <button mat-stroked-button class="btn-reembolso" *ngIf="confirmandoReembolso !== ing.id; else confirmar"
+          (click)="pedirReembolso(ing)">
+    Solicitar reembolso
+  </button>
+
+  <ng-template #confirmar>
+    <div class="confirmacao">
+      <span>Solicitar o reembolso deste ingresso?</span>
+      <div>
+        <button mat-button class="btn-nao" (click)="confirmandoReembolso = undefined">Não</button>
+        <button mat-flat-button class="btn-sim" (click)="reembolsar(ing)">Sim, solicitar</button>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<p class="aviso" *ngIf="avisos[ing.id] as a" [class.erro]="a.erro" role="status">{{ a.texto }}</p>
       </mat-card-content>
     </mat-card>
   </div>

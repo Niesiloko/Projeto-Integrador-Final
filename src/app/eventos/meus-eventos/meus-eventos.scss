@@ -131,6 +131,30 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
 .btn-editar { color: $cinza-texto !important; }
 .btn-excluir { color: $vermelho !important; }
 
+.confirmacao {
+  align-items: center;
+
+  span { color: $vermelho; font-weight: 500; margin-right: auto; padding-left: 8px; }
+}
+
+.btn-nao { color: $cinza-texto !important; }
+
+.btn-sim {
+  white-space: nowrap;
+  background-color: $vermelho !important;
+  color: $branco !important;
+  border-radius: 20px;
+}
+
+.aviso {
+  margin: 0 12px 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: $vermelho;
+  font-size: 13px;
+}
+
 .vazio {
   text-align: center;
   padding: 56px 16px;

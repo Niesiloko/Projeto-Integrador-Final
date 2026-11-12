@@ -24,6 +24,11 @@ export class MeusEventos {
   resumos: Record<number, ResumoVendas> = {};
   receitaTotal = 0;
 
+  // confirmações e avisos aparecem no próprio cartão do evento
+  confirmandoExclusao?: number;
+  confirmandoReembolso?: number;
+  avisos: Record<number, string> = {};
+
   constructor(
     private eventoService: EventoService,
     private ingressoService: IngressoService,
@@ -56,23 +61,27 @@ export class MeusEventos {
   }
 
   //depois de aprovado, o ingresso e o QR Code deixam de valer
+  // clique em "Sim, aprovar"
   aprovar(ingresso: Ingresso) {
-    if (!confirm(`Aprovar o reembolso de ${ingresso.titular}?`)) {
-      return;
-    }
+    this.confirmandoReembolso = undefined;
     this.ingressoService.aprovarReembolso(ingresso.id);
     this.carregar();
   }
 
-  excluir(id: number) {
+  // primeiro clique em Excluir: confere a regra e pede confirmação no cartão
+  pedirExclusao(id: number) {
     // evento com ingressos não pode sumir: os compradores perderiam o ingresso
     if (this.ingressoService.existemDoEvento(id)) {
-      alert('Este evento já tem ingressos vendidos e não pode ser excluído.');
+      this.avisos[id] = 'Este evento já teve ingressos vendidos e não pode ser excluído.';
       return;
     }
-    if (!confirm('Deseja excluir este evento?')) {
-      return;
-    }
+    delete this.avisos[id];
+    this.confirmandoExclusao = id;
+  }
+
+  // clique em "Sim, excluir"
+  excluir(id: number) {
+    this.confirmandoExclusao = undefined;
     this.eventoService.excluir(id);
     this.carregar();
   }
