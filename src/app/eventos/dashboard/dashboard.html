@@ -1,0 +1,102 @@
+<div class="page-container">
+  <ng-container *ngIf="logado; else entrar">
+    <div class="cabecalho">
+      <h2>Dashboard</h2>
+      <p class="subtitulo">Indicadores dos seus eventos, calculados a partir das vendas registradas.</p>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi">
+        <small>Eventos publicados</small>
+        <strong>{{ eventosPublicados }}</strong>
+        <span>
+          {{ eventosProximos }} {{ eventosProximos === 1 ? 'próximo' : 'próximos' }} ·
+          {{ eventosRealizados }} {{ eventosRealizados === 1 ? 'realizado' : 'realizados' }}
+        </span>
+      </div>
+
+      <div class="kpi">
+        <small>Ingressos vendidos</small>
+        <strong>{{ ingressosVendidos }}</strong>
+        <span>sem contar os reembolsados</span>
+      </div>
+
+      <div class="kpi">
+        <small>Receita total</small>
+        <strong>{{ receitaTotal | currency }}</strong>
+        <span>ticket médio de {{ ticketMedio | currency }}</span>
+      </div>
+
+      <a class="kpi kpi-link" routerLink="/eventos/meus-eventos" [class.alerta]="reembolsosPendentes > 0">
+        <small>Reembolsos pendentes</small>
+        <strong>{{ reembolsosPendentes }}</strong>
+        <span *ngIf="reembolsosPendentes > 0; else semPendentes">
+          <mat-icon>arrow_forward</mat-icon> aprovar em Meus eventos
+        </span>
+        <ng-template #semPendentes><span>nenhum aguardando</span></ng-template>
+      </a>
+
+      <div class="kpi">
+        <small>Taxa de reembolso</small>
+        <strong>{{ taxaReembolso | percent:'1.0-1' }}</strong>
+        <span>pedidos e devoluções sobre o total emitido</span>
+      </div>
+    </div>
+
+    <!-- gráficos de barras -->
+    <div class="graficos" *ngIf="eventosPublicados > 0; else semEventos">
+      <section class="grafico">
+        <h3>Receita por evento</h3>
+        <div class="barra-linha" *ngFor="let b of receitaPorEvento"
+             [title]="b.nome + ': ' + (b.valor | currency) + ' (' + b.detalhe + ')'">
+          <span class="barra-nome">{{ b.nome }}</span>
+          <div class="barra-trilho">
+            <div class="barra" [style.width.%]="largura(b, receitaPorEvento)"></div>
+          </div>
+          <span class="barra-valor">{{ b.valor | currency }}</span>
+        </div>
+      </section>
+
+      <section class="grafico">
+        <h3>Ingressos vendidos por categoria</h3>
+        <div class="barra-linha" *ngFor="let b of vendasPorCategoria" [title]="b.nome + ': ' + b.detalhe">
+          <span class="barra-nome">{{ b.nome }}</span>
+          <div class="barra-trilho">
+            <div class="barra" [style.width.%]="largura(b, vendasPorCategoria)"></div>
+          </div>
+          <span class="barra-valor">{{ b.valor }}</span>
+        </div>
+        <p class="vazio-grafico" *ngIf="vendasPorCategoria.length === 0">Nenhum ingresso vendido ainda.</p>
+      </section>
+    </div>
+
+    <ng-template #semEventos>
+      <div class="vazio">
+        <p>Você ainda não publicou eventos. Os indicadores aparecem assim que houver eventos e vendas.</p>
+        <a routerLink="/eventos/criar-evento">Criar meu primeiro evento</a>
+      </div>
+    </ng-template>
+
+    <!-- volta o sistema para os dados de exemplo (útil antes de uma apresentação) -->
+    <div class="restaurar">
+      <ng-container *ngIf="!confirmandoRestauracao; else confirmar">
+        <button mat-button class="btn-restaurar" (click)="confirmandoRestauracao = true">
+          <mat-icon>restart_alt</mat-icon> Restaurar dados de demonstração
+        </button>
+      </ng-container>
+      <ng-template #confirmar>
+        <span>Isso apaga todos os dados deste navegador e carrega os exemplos de novo.</span>
+        <button mat-button class="btn-nao" (click)="confirmandoRestauracao = false">Cancelar</button>
+        <button mat-flat-button class="btn-sim" (click)="restaurarDemonstracao()">Restaurar</button>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-template #entrar>
+    <div class="vazio">
+      <p>Entre com sua conta para ver os indicadores dos seus eventos.</p>
+      <a routerLink="/login">Entrar</a>
+    </div>
+  </ng-template>
+</div>

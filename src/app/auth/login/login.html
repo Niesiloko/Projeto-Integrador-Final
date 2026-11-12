@@ -17,11 +17,22 @@
         <input matInput type="password" [(ngModel)]="senha" required>
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
+
+      <p class="erro" *ngIf="erro" role="alert">{{ erro }}</p>
     </mat-card-content>
 
     <mat-card-actions class="auth-actions">
       <button mat-flat-button color="primary" class="btn-block" (click)="fazerLogin()">Entrar</button>
       <p class="auth-link">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
     </mat-card-actions>
+
+    <div class="contas-teste">
+      <strong>Contas de teste</strong>
+      <button type="button" class="conta" *ngFor="let c of contasTeste" (click)="usarConta(c)">
+        <span class="perfil">{{ c.perfil }}</span>
+        <span>{{ c.email }} · {{ c.senha }}</span>
+      </button>
+      <small>Clique em uma conta para preencher o formulário.</small>
+    </div>
   </mat-card>
 </div>

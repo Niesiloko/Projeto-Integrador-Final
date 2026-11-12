@@ -16,17 +16,20 @@ export class DetalheEvento {
 
   evento?: Evento;
   jaComprado = false;
+  encerrado = false;
+  bloqueado = false;
 
   constructor(
     route: ActivatedRoute,
     private router: Router,
     private eventoService: EventoService,
-    private ingressoService: IngressoService,
+    public ingressoService: IngressoService,
     public categoriaService: CategoriaService,
     private auth: AuthService
   ) {
     const id = Number(route.snapshot.paramMap.get('id'));
     this.evento = this.eventoService.buscarPorId(id);
+    this.encerrado = !!this.evento && new Date(this.evento.data).getTime() <= Date.now();
     this.atualizarCompra();
   }
 
@@ -37,15 +40,21 @@ export class DetalheEvento {
       usuario &&
       this.ingressoService.jaComprou(this.evento.id, usuario.email)
     );
+    this.bloqueado = !!(
+      this.evento &&
+      usuario &&
+      !this.jaComprado &&
+      this.ingressoService.compraBloqueada(this.evento.id, usuario.email)
+    );
   }
 
   comprar() {
-    if (!this.evento) {
+    if (!this.evento || this.encerrado || this.bloqueado) {
       return;
     }
     const usuario = this.auth.usuarioLogado;
     if (!usuario) {
-      alert('Faça login para comprar ingressos.');
+      // manda para o login; a tela de login mostra as contas de teste
       this.router.navigate(['/login']);
       return;
     }

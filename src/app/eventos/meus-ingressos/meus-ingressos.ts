@@ -20,7 +20,7 @@ export class MeusIngressos {
   avisos: Record<number, { texto: string; erro: boolean }> = {};
 
   constructor(
-    private ingressoService: IngressoService,
+    public ingressoService: IngressoService,
     private auth: AuthService,
     private cdr: ChangeDetectorRef
   ) {
