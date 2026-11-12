@@ -21,6 +21,9 @@ import br.edu.unifio.conectaevent.repositorios.ReembolsoRepositorio;
 
 @Service
 public class IngressoServico {
+    // Depois de 2 reembolsos no mesmo evento, o participante não pode mais comprar para ele.
+    public static final long LIMITE_REEMBOLSOS_POR_EVENTO = 2;
+
     @Autowired
     private IngressoRepositorio ingressoRepositorio;
 
@@ -71,6 +74,13 @@ public class IngressoServico {
         if (ingressoRepositorio.existsByEventoIdAndParticipanteIdAndStatusIn(evento.getId(), participante.getId(),
                 StatusIngresso.OCUPAM_VAGA)) {
             throw new RegraNegocioException(participante.getNome() + " já possui ingresso para este evento.");
+        }
+        // Regra: comprar e reembolsar o mesmo evento repetidamente não é permitido.
+        long reembolsos = ingressoRepositorio.countByEventoIdAndParticipanteIdAndStatus(evento.getId(),
+                participante.getId(), StatusIngresso.REEMBOLSADO);
+        if (reembolsos >= LIMITE_REEMBOLSOS_POR_EVENTO) {
+            throw new RegraNegocioException("Compra indisponível: " + participante.getNome() + " já efetuou "
+                    + reembolsos + " reembolsos nesse evento.");
         }
         // Regra: não vender além da capacidade do evento.
         if (eventoServico.contarVendidos(evento.getId()) >= evento.getCapacidade()) {

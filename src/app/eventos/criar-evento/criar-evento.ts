@@ -25,6 +25,7 @@ export class CriarEvento {
     local: '',
     descricao: '',
     valor: 0,
+    capacidade: 100,
     imagem: ''
   };
 
@@ -62,6 +63,7 @@ export class CriarEvento {
       local: existente.local,
       descricao: existente.descricao,
       valor: existente.valor,
+      capacidade: existente.capacidade,
       imagem: existente.imagem ?? ''
     };
   }
@@ -80,6 +82,18 @@ export class CriarEvento {
     if (this.evento.valor < 0) {
       alert('O valor do ingresso não pode ser negativo.');
       return;
+    }
+    if (!Number.isInteger(this.evento.capacidade) || this.evento.capacidade < 1) {
+      alert('A capacidade deve ser um número inteiro de pelo menos 1 pessoa.');
+      return;
+    }
+    // regra: na edição, a capacidade não pode ficar menor que os ingressos já vendidos
+    if (this.idEdicao) {
+      const vendidos = this.ingressoService.vendidosDoEvento(this.idEdicao);
+      if (this.evento.capacidade < vendidos) {
+        alert(`A capacidade não pode ser menor que os ${vendidos} ingressos já vendidos.`);
+        return;
+      }
     }
 
     const dados = { ...this.evento, categoriaId: this.evento.categoriaId as number };

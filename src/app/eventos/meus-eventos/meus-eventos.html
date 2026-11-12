@@ -37,8 +37,8 @@
         <p class="descricao" *ngIf="ev.descricao">{{ ev.descricao }}</p>
         <div class="vendas" *ngIf="resumos[ev.id] as r">
   <div>
-    <small>Ingressos vendidos</small>
-    <strong>{{ r.vendidos }}</strong>
+    <small>Vendidos</small>
+    <strong>{{ r.vendidos }} / {{ ev.capacidade }}</strong>
   </div>
   <div>
     <small>Receita</small>
@@ -50,13 +50,17 @@
   <h4>Reembolsos pendentes</h4>
   <div class="reembolso-item" *ngFor="let p of resumos[ev.id].pendentes">
     <span>{{ p.titular }}</span>
-    <button mat-button class="btn-aprovar" *ngIf="confirmandoReembolso !== p.id; else confirmarReembolso"
-            (click)="confirmandoReembolso = p.id">Aprovar</button>
+    <span class="decisao" *ngIf="confirmandoReembolso?.id !== p.id; else confirmarReembolso">
+      <button mat-button class="btn-recusar" (click)="confirmandoReembolso = { id: p.id, acao: 'recusar' }">Recusar</button>
+      <button mat-button class="btn-aprovar" (click)="confirmandoReembolso = { id: p.id, acao: 'aprovar' }">Aprovar</button>
+    </span>
 
     <ng-template #confirmarReembolso>
       <span class="confirmacao">
         <button mat-button class="btn-nao" (click)="confirmandoReembolso = undefined">Não</button>
-        <button mat-flat-button class="btn-sim" (click)="aprovar(p)">Sim, aprovar</button>
+        <button mat-flat-button class="btn-sim" (click)="decidir(p)">
+          {{ confirmandoReembolso?.acao === 'aprovar' ? 'Sim, aprovar' : 'Sim, recusar' }}
+        </button>
       </span>
     </ng-template>
   </div>

@@ -46,24 +46,25 @@ export class DemoService {
     // datas relativas a hoje, para a demonstração funcionar em qualquer dia
     const eventos: Evento[] = [
       { id: 1, titulo: 'Festival de Rock Ourinhos', categoriaId: cat('Música'), data: this.daquiA(30, 20),
-        local: 'Parque de Exposições - Ourinhos/SP', valor: 80, organizadorEmail: org,
+        local: 'Parque de Exposições - Ourinhos/SP', valor: 80, capacidade: 500, organizadorEmail: org,
         descricao: 'Bandas da região em uma noite inteira de rock.' },
       { id: 2, titulo: 'Hackathon UniFIO', categoriaId: cat('Tecnologia'), data: this.daquiA(20, 9),
-        local: 'UniFIO - Ourinhos/SP', valor: 25, organizadorEmail: org,
+        local: 'UniFIO - Ourinhos/SP', valor: 25, capacidade: 100, organizadorEmail: org,
         descricao: '24 horas de desenvolvimento em equipe, com mentoria e premiação.' },
       // acontece em 1 dia: demonstra a regra de reembolso só até 48 horas antes
       { id: 3, titulo: 'Corrida Noturna 5K', categoriaId: cat('Esportes'), data: this.daquiA(1),
-        local: 'Avenida Jacinto Sá - Ourinhos/SP', valor: 40, organizadorEmail: org,
+        local: 'Avenida Jacinto Sá - Ourinhos/SP', valor: 40, capacidade: 200, organizadorEmail: org,
         descricao: 'Corrida de rua com percurso iluminado. Kit atleta incluso.' },
+      // capacidade 2 com 2 ingressos vendidos: demonstra o evento esgotado
       { id: 4, titulo: 'Workshop de Angular', categoriaId: cat('Workshops'), data: this.daquiA(10, 19),
-        local: 'Laboratório 3 - UniFIO', valor: 50, organizadorEmail: org,
+        local: 'Laboratório 3 - UniFIO', valor: 50, capacidade: 2, organizadorEmail: org,
         descricao: 'Oficina prática de Angular com Angular Material.' },
       { id: 5, titulo: 'Noite de Stand-up', categoriaId: cat('Teatro'), data: this.daquiA(15, 21),
-        local: 'Teatro Municipal - Ourinhos/SP', valor: 35, organizadorEmail: org,
+        local: 'Teatro Municipal - Ourinhos/SP', valor: 35, capacidade: 150, organizadorEmail: org,
         descricao: 'Comediantes da região em uma noite de humor.' },
       // já aconteceu: os ingressos aparecem como utilizados
       { id: 6, titulo: 'Meetup de Spring Boot', categoriaId: cat('Tecnologia'), data: this.daquiA(-5, 19),
-        local: 'Auditório - UniFIO', valor: 0, organizadorEmail: org,
+        local: 'Auditório - UniFIO', valor: 0, capacidade: 80, organizadorEmail: org,
         descricao: 'Encontro gratuito sobre APIs REST com Spring Boot.' }
     ];
 

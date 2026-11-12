@@ -18,6 +18,8 @@ export class DetalheEvento {
   jaComprado = false;
   encerrado = false;
   bloqueado = false;
+  esgotado = false;
+  vagasRestantes = 0;
 
   constructor(
     route: ActivatedRoute,
@@ -46,10 +48,14 @@ export class DetalheEvento {
       !this.jaComprado &&
       this.ingressoService.compraBloqueada(this.evento.id, usuario.email)
     );
+    if (this.evento) {
+      this.vagasRestantes = Math.max(0, this.evento.capacidade - this.ingressoService.vendidosDoEvento(this.evento.id));
+      this.esgotado = this.vagasRestantes === 0;
+    }
   }
 
   comprar() {
-    if (!this.evento || this.encerrado || this.bloqueado) {
+    if (!this.evento || this.encerrado || this.bloqueado || this.esgotado) {
       return;
     }
     const usuario = this.auth.usuarioLogado;

@@ -6,6 +6,7 @@ export interface Evento {
   local: string;
   descricao: string;
   valor: number;
+  capacidade: number;   // quantos ingressos podem ser vendidos
   imagem?: string;
   organizadorEmail?: string;
 }

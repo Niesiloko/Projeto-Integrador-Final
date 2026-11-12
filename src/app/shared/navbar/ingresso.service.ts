@@ -22,6 +22,16 @@ export class IngressoService {
     return this.listar().filter(i => i.compradorEmail === email);
   }
 
+  // vagas ocupadas: todo ingresso que não foi reembolsado (o reembolsado libera a vaga)
+  vendidosDoEvento(eventoId: number): number {
+    return this.listar().filter(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO').length;
+  }
+
+  // regra: não vender além da capacidade do evento
+  esgotado(evento: Evento): boolean {
+    return this.vendidosDoEvento(evento.id) >= evento.capacidade;
+  }
+
   // ingresso reembolsado já foi devolvido e não conta; os demais ainda prendem o evento
   temIngressosAtivos(eventoId: number): boolean {
     return this.listar().some(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO');
@@ -61,7 +71,7 @@ export class IngressoService {
   }
 
   comprar(evento: Evento, titular: string, email: string): Ingresso | undefined {
-    if (this.compraBloqueada(evento.id, email)) {
+    if (this.compraBloqueada(evento.id, email) || this.esgotado(evento)) {
       return undefined;
     }
     const id = Date.now();
@@ -106,6 +116,11 @@ export class IngressoService {
 
   aprovarReembolso(id: number) {
     this.atualizarStatus(id, 'REEMBOLSADO');
+  }
+
+  // recusado: o ingresso volta a valer normalmente, com o QR Code
+  recusarReembolso(id: number) {
+    this.atualizarStatus(id, 'CONFIRMADO');
   }
 
   validar(codigo: string): { valido: boolean; mensagem: string } {

@@ -26,7 +26,7 @@ export class MeusEventos {
 
   // confirmações e avisos aparecem no próprio cartão do evento
   confirmandoExclusao?: number;
-  confirmandoReembolso?: number;
+  confirmandoReembolso?: { id: number; acao: 'aprovar' | 'recusar' };
   avisos: Record<number, string> = {};
 
   constructor(
@@ -60,11 +60,15 @@ export class MeusEventos {
     }
   }
 
-  //depois de aprovado, o ingresso e o QR Code deixam de valer
-  // clique em "Sim, aprovar"
-  aprovar(ingresso: Ingresso) {
+  // clique em "Sim, aprovar" ou "Sim, recusar"
+  // aprovado: o ingresso e o QR Code deixam de valer; recusado: o ingresso volta a valer
+  decidir(ingresso: Ingresso) {
+    if (this.confirmandoReembolso?.acao === 'aprovar') {
+      this.ingressoService.aprovarReembolso(ingresso.id);
+    } else {
+      this.ingressoService.recusarReembolso(ingresso.id);
+    }
     this.confirmandoReembolso = undefined;
-    this.ingressoService.aprovarReembolso(ingresso.id);
     this.carregar();
   }
 

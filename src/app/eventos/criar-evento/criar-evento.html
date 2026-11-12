@@ -39,10 +39,17 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline">
-  <mat-label>Link da imagem (opcional)</mat-label>
-  <input matInput [(ngModel)]="evento.imagem" placeholder="https://...">
-</mat-form-field>
+      <div class="row-inputs">
+        <mat-form-field appearance="outline">
+          <mat-label>Capacidade (pessoas)</mat-label>
+          <input matInput type="number" min="1" step="1" [(ngModel)]="evento.capacidade" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Link da imagem (opcional)</mat-label>
+          <input matInput [(ngModel)]="evento.imagem" placeholder="https://...">
+        </mat-form-field>
+      </div>
 
       <mat-form-field appearance="outline">
         <mat-label>Descrição Completa</mat-label>
