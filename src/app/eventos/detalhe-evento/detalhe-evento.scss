@@ -122,6 +122,17 @@ $texto-escuro: #1a202c;
   flex-wrap: wrap;
 }
 
+.selo-encerrado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #edf2f7;
+  color: #4a5568;
+  font-weight: 600;
+}
+
 .selo-comprado {
   display: inline-flex;
   align-items: center;

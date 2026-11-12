@@ -16,6 +16,7 @@ export class DetalheEvento {
 
   evento?: Evento;
   jaComprado = false;
+  encerrado = false;
 
   constructor(
     route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class DetalheEvento {
   ) {
     const id = Number(route.snapshot.paramMap.get('id'));
     this.evento = this.eventoService.buscarPorId(id);
+    this.encerrado = !!this.evento && new Date(this.evento.data).getTime() <= Date.now();
     this.atualizarCompra();
   }
 
@@ -40,12 +42,12 @@ export class DetalheEvento {
   }
 
   comprar() {
-    if (!this.evento) {
+    if (!this.evento || this.encerrado) {
       return;
     }
     const usuario = this.auth.usuarioLogado;
     if (!usuario) {
-      alert('Faça login para comprar ingressos.');
+      // manda para o login; a tela de login mostra as contas de teste
       this.router.navigate(['/login']);
       return;
     }

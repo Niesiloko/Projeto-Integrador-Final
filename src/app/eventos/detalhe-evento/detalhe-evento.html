@@ -28,9 +28,15 @@
             <strong>{{ evento.valor > 0 ? (evento.valor | currency:'BRL') : 'Gratuito' }}</strong>
           </div>
 
-                   <button mat-flat-button class="btn-primary-sympla" *ngIf="!jaComprado; else comprado" (click)="comprar()">
+          <span class="selo-encerrado" *ngIf="encerrado && !jaComprado">
+            <mat-icon>event_busy</mat-icon> Evento encerrado
+          </span>
+
+          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado" (click)="comprar()">
             Comprar ingresso
           </button>
+
+          <ng-container *ngIf="jaComprado" [ngTemplateOutlet]="comprado"></ng-container>
 
           <ng-template #comprado>
             <div class="comprado">

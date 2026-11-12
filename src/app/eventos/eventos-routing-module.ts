@@ -6,12 +6,14 @@ import { MeusEventos } from './meus-eventos/meus-eventos';
 import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 import { DetalheEvento } from './detalhe-evento/detalhe-evento';
 import { Categorias } from './categorias/categorias';
+import { Dashboard } from './dashboard/dashboard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'meus-eventos', pathMatch: 'full' },
   { path: 'criar-evento', component: CriarEvento },
   { path: 'editar-evento/:id', component: CriarEvento },
   { path: 'categorias', component: Categorias },
+  { path: 'dashboard', component: Dashboard },
   { path: 'meus-eventos', component: MeusEventos },
   { path: 'meus-ingressos', component: MeusIngressos },
   { path: 'cadastro-evento', component: CadastroEvento },

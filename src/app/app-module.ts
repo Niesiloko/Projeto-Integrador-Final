@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { BrowserModule,  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -21,6 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+
+// formatos brasileiros nos pipes: R$ 25,00 e datas em português
+registerLocaleData(localePt);
 
 
 @NgModule({
@@ -45,8 +50,10 @@ import { MatListModule } from '@angular/material/list';
     MatListModule
   ],
   providers: [
-    provideAnimations()
-  ], 
+    provideAnimations(),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' }
+  ],
   bootstrap: [App]
 })
 export class AppModule { }

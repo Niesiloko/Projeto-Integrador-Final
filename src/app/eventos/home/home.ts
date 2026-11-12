@@ -19,7 +19,11 @@ export class Home {
   data = '';
 
   constructor(private eventoService: EventoService, public categoriaService: CategoriaService) {
-    this.eventos = this.eventoService.listar();
+    // a vitrine mostra só o que ainda vai acontecer, do mais próximo ao mais distante
+    const agora = Date.now();
+    this.eventos = this.eventoService.listar()
+      .filter(e => new Date(e.data).getTime() > agora)
+      .sort((a, b) => a.data.localeCompare(b.data));
   }
 
   // só as categorias que têm algum evento aparecem no filtro

@@ -18,6 +18,12 @@
         <span matListItemTitle>Home</span>
       </a>
 
+      <a mat-list-item routerLink="/eventos/dashboard" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>insights</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
       <a mat-list-item routerLink="/eventos/criar-evento" routerLinkActive="item-ativo"
          (click)="fecharSeCelular(menu)">
         <mat-icon matListItemIcon>add_circle_outline</mat-icon>

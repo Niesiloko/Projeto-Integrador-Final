@@ -1,0 +1,206 @@
+$laranja: #ff5500;
+$laranja-escuro: #d94800;
+$laranja-claro: #fff1e8;
+$branco: #ffffff;
+$cinza-fundo: #edf2f7;
+$cinza-texto: #4a5568;
+$cinza-claro: #718096;
+$texto-escuro: #1a202c;
+$vermelho: #c53030;
+$sombra: 0 2px 8px rgba(0, 0, 0, .1);
+
+.page-container {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.cabecalho {
+  margin-bottom: 24px;
+
+  h2 { margin: 0; color: $texto-escuro; }
+
+  .subtitulo {
+    margin: 4px 0 0;
+    color: $cinza-claro;
+    font-size: 14px;
+  }
+}
+
+// ---- KPIs ----
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: $branco;
+  border-radius: 12px;
+  border-top: 4px solid $laranja;
+  box-shadow: $sombra;
+  color: inherit;
+  text-decoration: none;
+
+  small {
+    color: $cinza-claro;
+    font-size: 13px;
+  }
+
+  strong {
+    color: $texto-escuro;
+    font-size: 28px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: $cinza-texto;
+    font-size: 12px;
+  }
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.kpi-link {
+  transition: transform .15s, box-shadow .15s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  }
+
+  // há reembolsos esperando decisão: destaca o cartão
+  &.alerta {
+    border-top-color: $vermelho;
+
+    strong, span { color: $vermelho; }
+  }
+}
+
+// ---- gráficos de barras ----
+.graficos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grafico {
+  padding: 18px;
+  background: $branco;
+  border-radius: 12px;
+  box-shadow: $sombra;
+
+  h3 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    color: $texto-escuro;
+  }
+}
+
+.barra-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  border-radius: 6px;
+
+  &:hover { background: $cinza-fundo; }
+}
+
+.barra-nome {
+  color: $cinza-texto;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-trilho {
+  height: 12px;
+}
+
+.barra {
+  height: 100%;
+  min-width: 2px;
+  background: $laranja;
+  border-radius: 0 4px 4px 0;
+}
+
+.barra-valor {
+  color: $texto-escuro;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.vazio-grafico {
+  margin: 0;
+  color: $cinza-claro;
+  font-size: 13px;
+}
+
+// ---- restaurar demonstração ----
+.restaurar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid $cinza-fundo;
+
+  span {
+    color: $vermelho;
+    font-size: 13px;
+  }
+}
+
+.btn-restaurar,
+.btn-nao {
+  color: $cinza-texto !important;
+}
+
+.btn-sim {
+  background-color: $vermelho !important;
+  color: $branco !important;
+  border-radius: 20px;
+}
+
+// ---- estados vazios ----
+.vazio {
+  text-align: center;
+  padding: 48px 16px;
+  color: $cinza-claro;
+
+  a {
+    display: inline-block;
+    margin-top: 12px;
+    background: $laranja;
+    color: $branco;
+    padding: 10px 24px;
+    border-radius: 24px;
+    text-decoration: none;
+
+    &:hover { background: $laranja-escuro; }
+  }
+}
