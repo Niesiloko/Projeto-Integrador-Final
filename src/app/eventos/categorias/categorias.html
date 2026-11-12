@@ -41,14 +41,22 @@
         {{ eventosPorCategoria[c.id] || 0 }} {{ eventosPorCategoria[c.id] === 1 ? 'evento' : 'eventos' }}
       </span>
 
-      <div class="item-acoes">
+      <div class="item-acoes" *ngIf="confirmandoExclusao !== c.id; else confirmar">
         <button mat-icon-button class="btn-editar" (click)="editar(c)" [attr.aria-label]="'Editar ' + c.nome">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button class="btn-excluir" (click)="excluir(c)" [attr.aria-label]="'Excluir ' + c.nome">
+        <button mat-icon-button class="btn-excluir" (click)="pedirExclusao(c)" [attr.aria-label]="'Excluir ' + c.nome">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
+
+      <ng-template #confirmar>
+        <div class="confirmacao">
+          <span>Excluir?</span>
+          <button mat-button class="btn-cancelar" (click)="confirmandoExclusao = undefined">Não</button>
+          <button mat-flat-button class="btn-confirmar-exclusao" (click)="excluir(c)">Sim, excluir</button>
+        </div>
+      </ng-template>
     </div>
 
     <p class="vazio" *ngIf="categorias.length === 0">Nenhuma categoria cadastrada.</p>

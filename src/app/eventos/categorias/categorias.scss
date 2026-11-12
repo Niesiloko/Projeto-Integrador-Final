@@ -149,6 +149,25 @@ mat-form-field {
 .btn-editar { color: $cinza-texto !important; }
 .btn-excluir { color: $vermelho !important; }
 
+.confirmacao {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+
+  span {
+    color: $vermelho;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+}
+
+.btn-confirmar-exclusao {
+  background-color: $vermelho !important;
+  color: $branco !important;
+  border-radius: 20px;
+}
+
 .vazio {
   text-align: center;
   color: $cinza-claro;

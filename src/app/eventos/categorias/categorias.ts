@@ -18,6 +18,9 @@ export class Categorias {
   mensagem = '';
   erro = false;
 
+  // id da categoria que está pedindo confirmação de exclusão (a confirmação fica na própria linha)
+  confirmandoExclusao?: number;
+
   constructor(private categoriaService: CategoriaService, private eventoService: EventoService) {
     this.carregar();
   }
@@ -48,15 +51,20 @@ export class Categorias {
     this.form = { nome: '', descricao: '' };
   }
 
-  excluir(c: Categoria) {
+  // primeiro clique na lixeira: pede confirmação na linha
+  pedirExclusao(c: Categoria) {
     // regra: categoria com eventos não pode ser excluída
     if (this.eventoService.usaCategoria(c.id)) {
       this.mostrar(`Não é possível excluir "${c.nome}": existem eventos nessa categoria.`, true);
       return;
     }
-    if (!confirm(`Excluir a categoria "${c.nome}"?`)) {
-      return;
-    }
+    this.mensagem = '';
+    this.confirmandoExclusao = c.id;
+  }
+
+  // clique em "Sim, excluir"
+  excluir(c: Categoria) {
+    this.confirmandoExclusao = undefined;
     this.categoriaService.excluir(c.id);
     if (this.form.id === c.id) {
       this.cancelar();

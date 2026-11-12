@@ -34,9 +34,9 @@ export class CategoriaService {
     return (id && this.buscarPorId(id)?.nome) || 'Sem categoria';
   }
 
-  // procura pelo nome (sem diferenciar maiúsculas) e cria se não existir
+  // procura pelo nome (sem diferenciar maiúsculas nem acentos) e cria se não existir
   obterOuCriar(nome: string): Categoria {
-    const existente = this.listar().find(c => c.nome.toLowerCase() === nome.trim().toLowerCase());
+    const existente = this.listar().find(c => this.normalizar(c.nome) === this.normalizar(nome));
     return existente ?? this.criar(nome);
   }
 
@@ -47,9 +47,9 @@ export class CategoriaService {
     }
 
     const lista = this.listar();
-    const repetida = lista.some(c => c.nome.toLowerCase() === nome.toLowerCase() && c.id !== categoria.id);
+    const repetida = lista.find(c => this.normalizar(c.nome) === this.normalizar(nome) && c.id !== categoria.id);
     if (repetida) {
-      return { ok: false, mensagem: `Já existe uma categoria chamada "${nome}".` };
+      return { ok: false, mensagem: `Já existe a categoria "${repetida.nome}".` };
     }
 
     if (categoria.id) {
@@ -82,6 +82,11 @@ export class CategoriaService {
     lista.push(categoria);
     this.gravar(lista);
     return categoria;
+  }
+
+  // "Música", "musica" e " MUSICA " viram "musica": tira acentos, espaços das pontas e maiúsculas
+  private normalizar(texto: string): string {
+    return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
 
   private gravar(lista: Categoria[]) {
