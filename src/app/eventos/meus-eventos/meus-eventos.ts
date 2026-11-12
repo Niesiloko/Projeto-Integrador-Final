@@ -3,6 +3,7 @@ import { Evento } from '../../shared/navbar/evento.model';
 import { EventoService } from '../../shared/navbar/evento.service';
 import { Ingresso } from '../../shared/navbar/ingresso.model';
 import { IngressoService } from '../../shared/navbar/ingresso.service';
+import { CategoriaService } from '../../shared/navbar/categoria.service';
 import { AuthService } from '../../shared/auth.service';
 
 interface ResumoVendas {
@@ -26,6 +27,7 @@ export class MeusEventos {
   constructor(
     private eventoService: EventoService,
     private ingressoService: IngressoService,
+    public categoriaService: CategoriaService,
     private auth: AuthService
   ) {
     this.carregar();
@@ -63,6 +65,11 @@ export class MeusEventos {
   }
 
   excluir(id: number) {
+    // evento com ingressos não pode sumir: os compradores perderiam o ingresso
+    if (this.ingressoService.existemDoEvento(id)) {
+      alert('Este evento já tem ingressos vendidos e não pode ser excluído.');
+      return;
+    }
     if (!confirm('Deseja excluir este evento?')) {
       return;
     }

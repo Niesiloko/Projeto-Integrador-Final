@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import { EventosRoutingModule } from './eventos-routing-module';
 import { CadastroEvento } from './cadastro-evento/cadastro-evento';
@@ -16,9 +17,10 @@ import { MeusEventos } from './meus-eventos/meus-eventos';
 import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 import { Home } from './home/home';
 import { DetalheEvento } from './detalhe-evento/detalhe-evento';
+import { Categorias } from './categorias/categorias';
 
 @NgModule({
-  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos, Home, DetalheEvento],
+  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos, Home, DetalheEvento, Categorias],
   imports: [
     CommonModule,
     MatIconModule,
@@ -29,6 +31,7 @@ import { DetalheEvento } from './detalhe-evento/detalhe-evento';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
   ],
   exports: [CadastroEvento],
 })

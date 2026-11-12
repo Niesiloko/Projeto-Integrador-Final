@@ -1,0 +1,155 @@
+$laranja: #ff5500;
+$laranja-escuro: #d94800;
+$laranja-claro: #fff1e8;
+$branco: #ffffff;
+$cinza-fundo: #edf2f7;
+$cinza-texto: #4a5568;
+$cinza-claro: #718096;
+$texto-escuro: #1a202c;
+$vermelho: #c53030;
+$verde: #2f855a;
+$sombra: 0 2px 8px rgba(0, 0, 0, .1);
+
+.page-container {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.cabecalho {
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    color: $texto-escuro;
+  }
+
+  .subtitulo {
+    margin: 4px 0 0;
+    color: $cinza-claro;
+    font-size: 14px;
+  }
+}
+
+.form-card {
+  padding: 20px 24px 12px;
+  background: $branco !important;
+  box-shadow: $sombra;
+  border-top: 5px solid $laranja !important;
+
+  // cor do foco dos campos (substitui o magenta padrão do Material)
+  --mat-form-field-outlined-focus-outline-color: #{$laranja};
+  --mat-form-field-outlined-focus-label-text-color: #{$laranja};
+  --mat-form-field-outlined-caret-color: #{$laranja};
+
+  h3 {
+    margin: 0 0 16px;
+    color: $texto-escuro;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.row-inputs {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.acoes-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-cancelar {
+  color: $cinza-texto !important;
+}
+
+.btn-primary-sympla {
+  background-color: $laranja !important;
+  color: $branco !important;
+  border-radius: 24px;
+  padding: 0 20px;
+
+  &:hover { background-color: $laranja-escuro !important; }
+}
+
+.mensagem {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f0fff4;
+  color: $verde;
+
+  &.erro {
+    background: #fff5f5;
+    color: $vermelho;
+  }
+}
+
+.lista {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  background: $branco;
+  border-left: 4px solid $laranja;
+  border-radius: 10px;
+  box-shadow: $sombra;
+
+  &.em-edicao {
+    background: $laranja-claro;
+  }
+}
+
+.item-texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  strong { color: $texto-escuro; }
+
+  small {
+    color: $cinza-claro;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.contador {
+  flex-shrink: 0;
+  background: $cinza-fundo;
+  color: $cinza-texto;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.item-acoes {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.btn-editar { color: $cinza-texto !important; }
+.btn-excluir { color: $vermelho !important; }
+
+.vazio {
+  text-align: center;
+  color: $cinza-claro;
+}

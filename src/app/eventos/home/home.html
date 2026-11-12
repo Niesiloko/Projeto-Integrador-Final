@@ -8,9 +8,9 @@
   <div class="filtros">
     <input type="text" placeholder="Local ou cidade" [(ngModel)]="local" />
     <input type="date" [(ngModel)]="data" />
-    <select [(ngModel)]="categoria">
-      <option value="">Todas as categorias</option>
-      <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+    <select [(ngModel)]="categoriaId">
+      <option [ngValue]="null">Todas as categorias</option>
+      <option *ngFor="let c of categorias" [ngValue]="c.id">{{ c.nome }}</option>
     </select>
     <button class="btn-limpar" (click)="limpar()">Limpar filtros</button>
   </div>
@@ -26,7 +26,7 @@
   <ng-template #icone><mat-icon>event</mat-icon></ng-template>
 </div>
       <div class="card-corpo">
-        <span class="categoria">{{ e.categoria }}</span>
+        <span class="categoria">{{ categoriaService.nome(e.categoriaId) }}</span>
         <h3>{{ e.titulo }}</h3>
         <p>{{ e.local }}</p>
         <small>{{ e.data | date:'dd/MM/yyyy HH:mm' }}</small>
