@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Evento } from '../../shared/navbar/evento.model';
 import { EventoService } from '../../shared/navbar/evento.service';
 import { IngressoService } from '../../shared/navbar/ingresso.service';
+import { CategoriaService } from '../../shared/navbar/categoria.service';
 import { AuthService } from '../../shared/auth.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class DetalheEvento {
     private router: Router,
     private eventoService: EventoService,
     private ingressoService: IngressoService,
+    public categoriaService: CategoriaService,
     private auth: AuthService
   ) {
     const id = Number(route.snapshot.paramMap.get('id'));

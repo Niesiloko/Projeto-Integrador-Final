@@ -15,6 +15,10 @@ export class MeusIngressos {
   ingressos: Ingresso[] = [];
   qrs: Record<number, string> = {};
 
+  // a confirmação e o resultado aparecem no próprio cartão do ingresso
+  confirmandoReembolso?: number;
+  avisos: Record<number, { texto: string; erro: boolean }> = {};
+
   constructor(
     private ingressoService: IngressoService,
     private auth: AuthService,
@@ -38,12 +42,17 @@ export class MeusIngressos {
     return ing.status === 'CONFIRMADO' || ing.status === 'REEMBOLSO_SOLICITADO';
   }
 
+  // primeiro clique: pede confirmação no cartão
+  pedirReembolso(ing: Ingresso) {
+    delete this.avisos[ing.id];
+    this.confirmandoReembolso = ing.id;
+  }
+
+  // clique em "Sim, solicitar"
   reembolsar(ing: Ingresso) {
-    if (!confirm('Deseja solicitar o reembolso deste ingresso?')) {
-      return;
-    }
+    this.confirmandoReembolso = undefined;
     const resultado = this.ingressoService.solicitarReembolso(ing.id);
-    alert(resultado.mensagem);
+    this.avisos[ing.id] = { texto: resultado.mensagem, erro: !resultado.ok };
     this.carregar();
   }
 

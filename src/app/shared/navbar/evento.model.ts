@@ -1,8 +1,8 @@
 export interface Evento {
   id: number;
   titulo: string;
-  categoria: string;
-  data: string;        
+  categoriaId: number;
+  data: string;
   local: string;
   descricao: string;
   valor: number;

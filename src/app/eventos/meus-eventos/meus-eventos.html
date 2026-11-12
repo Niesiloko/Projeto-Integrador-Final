@@ -15,7 +15,7 @@
   <div class="events-grid" *ngIf="meusEventos.length > 0; else vazio">
     <mat-card appearance="outlined" *ngFor="let ev of meusEventos" class="event-item-card">
       <div class="card-topo">
-        <span class="categoria" *ngIf="ev.categoria">{{ ev.categoria }}</span>
+        <span class="categoria">{{ categoriaService.nome(ev.categoriaId) }}</span>
         <h3>{{ ev.titulo }}</h3>
       </div>
 
@@ -50,19 +50,37 @@
   <h4>Reembolsos pendentes</h4>
   <div class="reembolso-item" *ngFor="let p of resumos[ev.id].pendentes">
     <span>{{ p.titular }}</span>
-    <button mat-button class="btn-aprovar" (click)="aprovar(p)">Aprovar</button>
+    <button mat-button class="btn-aprovar" *ngIf="confirmandoReembolso !== p.id; else confirmarReembolso"
+            (click)="confirmandoReembolso = p.id">Aprovar</button>
+
+    <ng-template #confirmarReembolso>
+      <span class="confirmacao">
+        <button mat-button class="btn-nao" (click)="confirmandoReembolso = undefined">Não</button>
+        <button mat-flat-button class="btn-sim" (click)="aprovar(p)">Sim, aprovar</button>
+      </span>
+    </ng-template>
   </div>
 </div>
       </mat-card-content>
 
-      <div class="card-acoes">
-        <button mat-button class="btn-editar">
+      <p class="aviso" *ngIf="avisos[ev.id]" role="status">{{ avisos[ev.id] }}</p>
+
+      <div class="card-acoes" *ngIf="confirmandoExclusao !== ev.id; else confirmarExclusao">
+        <button mat-button class="btn-editar" [routerLink]="['/eventos/editar-evento', ev.id]">
           <mat-icon>edit</mat-icon> Editar
         </button>
-        <button mat-button class="btn-excluir" (click)="excluir(ev.id)">
+        <button mat-button class="btn-excluir" (click)="pedirExclusao(ev.id)">
           <mat-icon>delete</mat-icon> Excluir
         </button>
       </div>
+
+      <ng-template #confirmarExclusao>
+        <div class="card-acoes confirmacao">
+          <span>Excluir?</span>
+          <button mat-button class="btn-nao" (click)="confirmandoExclusao = undefined">Não</button>
+          <button mat-flat-button class="btn-sim" (click)="excluir(ev.id)">Sim, excluir</button>
+        </div>
+      </ng-template>
     </mat-card>
   </div>
 

@@ -19,6 +19,22 @@ export class IngressoService {
     return this.listar().filter(i => i.compradorEmail === email);
   }
 
+  // ingresso reembolsado já foi devolvido e não conta; os demais ainda prendem o evento
+  temIngressosAtivos(eventoId: number): boolean {
+    return this.listar().some(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO');
+  }
+
+  // o ingresso guarda uma cópia do nome, da data e do local: atualiza quando o evento é editado
+  atualizarDadosDoEvento(evento: Evento) {
+    const lista = this.listar();
+    for (const i of lista.filter(i => i.eventoId === evento.id)) {
+      i.eventoNome = evento.titulo;
+      i.data = evento.data;
+      i.local = evento.local;
+    }
+    this.gravar(lista);
+  }
+
   // verdadeiro se o usuário já tem um ingresso válido deste evento
   jaComprou(eventoId: number, email: string): boolean {
     return this.listarDoUsuario(email).some(

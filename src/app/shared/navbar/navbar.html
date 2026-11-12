@@ -35,6 +35,12 @@
         <mat-icon matListItemIcon>confirmation_number</mat-icon>
         <span matListItemTitle>Meus ingressos</span>
       </a>
+
+      <a mat-list-item routerLink="/eventos/categorias" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>label</mat-icon>
+        <span matListItemTitle>Categorias</span>
+      </a>
     </mat-nav-list>
 
     <div class="rodape-menu">Projeto Integrador IV</div>

@@ -3,6 +3,7 @@ import { Evento } from '../../shared/navbar/evento.model';
 import { EventoService } from '../../shared/navbar/evento.service';
 import { Ingresso } from '../../shared/navbar/ingresso.model';
 import { IngressoService } from '../../shared/navbar/ingresso.service';
+import { CategoriaService } from '../../shared/navbar/categoria.service';
 import { AuthService } from '../../shared/auth.service';
 
 interface ResumoVendas {
@@ -23,9 +24,15 @@ export class MeusEventos {
   resumos: Record<number, ResumoVendas> = {};
   receitaTotal = 0;
 
+  // confirmações e avisos aparecem no próprio cartão do evento
+  confirmandoExclusao?: number;
+  confirmandoReembolso?: number;
+  avisos: Record<number, string> = {};
+
   constructor(
     private eventoService: EventoService,
     private ingressoService: IngressoService,
+    public categoriaService: CategoriaService,
     private auth: AuthService
   ) {
     this.carregar();
@@ -54,18 +61,27 @@ export class MeusEventos {
   }
 
   //depois de aprovado, o ingresso e o QR Code deixam de valer
+  // clique em "Sim, aprovar"
   aprovar(ingresso: Ingresso) {
-    if (!confirm(`Aprovar o reembolso de ${ingresso.titular}?`)) {
-      return;
-    }
+    this.confirmandoReembolso = undefined;
     this.ingressoService.aprovarReembolso(ingresso.id);
     this.carregar();
   }
 
-  excluir(id: number) {
-    if (!confirm('Deseja excluir este evento?')) {
+  // primeiro clique em Excluir: confere a regra e pede confirmação no cartão
+  pedirExclusao(id: number) {
+    // evento com ingressos ativos não pode sumir: os compradores perderiam o ingresso
+    if (this.ingressoService.temIngressosAtivos(id)) {
+      this.avisos[id] = 'Este evento tem ingressos ativos (confirmados, com reembolso em análise ou utilizados) e não pode ser excluído.';
       return;
     }
+    delete this.avisos[id];
+    this.confirmandoExclusao = id;
+  }
+
+  // clique em "Sim, excluir"
+  excluir(id: number) {
+    this.confirmandoExclusao = undefined;
     this.eventoService.excluir(id);
     this.carregar();
   }

@@ -1,0 +1,64 @@
+<div class="page-container">
+  <div class="cabecalho">
+    <h2>Categorias</h2>
+    <p class="subtitulo">Organize os eventos por tipo. Uma categoria com eventos não pode ser excluída.</p>
+  </div>
+
+  <mat-card appearance="outlined" class="form-card">
+    <h3>{{ form.id ? 'Editar categoria' : 'Nova categoria' }}</h3>
+
+    <div class="row-inputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput [(ngModel)]="form.nome" maxlength="50" placeholder="Ex: Gastronomia" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição (opcional)</mat-label>
+        <input matInput [(ngModel)]="form.descricao" maxlength="255" placeholder="Ex: Festivais e feiras gastronômicas">
+      </mat-form-field>
+    </div>
+
+    <div class="acoes-form">
+      <button mat-button class="btn-cancelar" *ngIf="form.id" (click)="cancelar()">Cancelar edição</button>
+      <button mat-flat-button class="btn-primary-sympla" (click)="salvar()">
+        <mat-icon>{{ form.id ? 'save' : 'add' }}</mat-icon>
+        {{ form.id ? 'Salvar alterações' : 'Adicionar categoria' }}
+      </button>
+    </div>
+  </mat-card>
+
+  <p class="mensagem" *ngIf="mensagem" [class.erro]="erro" role="status">{{ mensagem }}</p>
+
+  <div class="lista">
+    <div class="item" *ngFor="let c of categorias" [class.em-edicao]="form.id === c.id">
+      <div class="item-texto">
+        <strong>{{ c.nome }}</strong>
+        <small *ngIf="c.descricao">{{ c.descricao }}</small>
+      </div>
+
+      <span class="contador">
+        {{ eventosPorCategoria[c.id] || 0 }} {{ eventosPorCategoria[c.id] === 1 ? 'evento' : 'eventos' }}
+      </span>
+
+      <div class="item-acoes" *ngIf="confirmandoExclusao !== c.id; else confirmar">
+        <button mat-icon-button class="btn-editar" (click)="editar(c)" [attr.aria-label]="'Editar ' + c.nome">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-excluir" (click)="pedirExclusao(c)" [attr.aria-label]="'Excluir ' + c.nome">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <ng-template #confirmar>
+        <div class="confirmacao">
+          <span>Excluir?</span>
+          <button mat-button class="btn-cancelar" (click)="confirmandoExclusao = undefined">Não</button>
+          <button mat-flat-button class="btn-confirmar-exclusao" (click)="excluir(c)">Sim, excluir</button>
+        </div>
+      </ng-template>
+    </div>
+
+    <p class="vazio" *ngIf="categorias.length === 0">Nenhuma categoria cadastrada.</p>
+  </div>
+</div>
