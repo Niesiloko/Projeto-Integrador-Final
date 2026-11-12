@@ -1,0 +1,44 @@
+{
+  // Ambiente do Codespaces para o projeto inteiro:
+  //   front-end Angular (raiz do repositório) e back-end Spring Boot (pasta backend/).
+  // Baseado no .devcontainer do projeto de e-commerce da disciplina.
+  "name": "Conecta Event",
+
+  // Imagem com JDK 21, Maven e MySQL (ver Dockerfile nesta pasta).
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  // Node.js para o Angular (npm install / ng serve).
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    }
+  },
+
+  //   4200 -> front-end Angular
+  //   8080 -> API Spring Boot
+  //   3306 -> MySQL
+  "forwardPorts": [4200, 8080, 3306],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-boot-dashboard",
+        "cweijan.vscode-mysql-client2",
+        "angular.ng-template"
+      ],
+      "settings": {
+        "java.server.launchMode": "Standard"
+      }
+    }
+  },
+
+  // Roda UMA vez, na criação do container: sobe o MySQL e cria o banco.
+  "postCreateCommand": "/bin/bash .devcontainer/init-mysql.sh",
+
+  // Roda em todo start do container: garante o MySQL ligado.
+  "postStartCommand": "service mysql start"
+}

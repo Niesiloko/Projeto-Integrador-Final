@@ -1,0 +1,2 @@
+# Scripts shell sempre com LF (rodam no Linux do Codespaces)
+*.sh text eol=lf
