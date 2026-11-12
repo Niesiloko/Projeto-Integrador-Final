@@ -11075,7 +11075,7 @@
     },
     {
       "key": "auth_password_11st",
-      "secret": true
+      "value": "senha-errada"
     }
   ]
 }

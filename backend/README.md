@@ -108,6 +108,7 @@ As variáveis (`baseUrl`, usuários e senhas) estão na própria coleção.
 ## Integrantes
 
 | Nome completo  | ID acadêmico |
+|---|---|
 | Lucas Scalada Noesse | 272362 |
 | Kauã Yury Furtado    | 272866 |
 | Ana Carolina Medeiro | 273548 |
