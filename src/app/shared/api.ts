@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
-// Endereço da API Spring Boot.
-// Em desenvolvimento, "/api" passa pelo proxy do Angular (proxy.conf.json), que repassa para http://localhost:8080.
-// Ao publicar o front em outro servidor, troque pelo endereço público da API (ex.: 'https://minha-api.com').
-export const API_URL = '/api';
+// Endereço da API Spring Boot, que muda conforme o ambiente:
+//  - desenvolvimento (npm start): '/api', pelo proxy do Angular (proxy.conf.json) para http://localhost:8080
+//  - produção (ng build): endereço público da API, em src/environments/environment.production.ts
+export const API_URL = environment.apiUrl;
 
 // Corpo de erro padrão da API (ErroResposta.java).
 interface ErroApi {

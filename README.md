@@ -7,6 +7,15 @@ Sistema web de eventos: o **organizador** publica eventos e acompanha as vendas;
 
 O front usa a API em todas as telas: os dados ficam no MySQL, não no navegador.
 
+## Aplicação publicada
+
+- **Site:** _preencher com o link do Render_
+- **API:** _preencher com o link do Render_
+
+O primeiro acesso pode levar até 2 minutos: no plano gratuito, a API "dorme" quando não é usada (o site avisa enquanto ela acorda). Ao acordar, os dados voltam aos exemplos iniciais.
+
+Passo a passo de como publicar: [PUBLICACAO.md](PUBLICACAO.md).
+
 ## Como rodar o sistema completo
 
 No GitHub Codespaces (o `.devcontainer` já instala Java, Maven, MySQL e Node), abra **dois terminais**:
@@ -36,9 +45,10 @@ A cada início da API, o banco volta aos dados de exemplo (`backend/src/main/res
 
 Na tela de cadastro, a pessoa escolhe se quer ser organizador ou participante. Sem login, dá para ver a vitrine de eventos e os detalhes de cada um.
 
-### Publicando o front em outro endereço
+### Endereço da API
 
-Se o site for publicado separado da API, troque `API_URL` em `src/app/shared/api.ts` pelo endereço público da API (o CORS já está liberado no backend).
+- Desenvolvimento (`npm start`): `/api`, pelo proxy, em `src/environments/environment.ts`.
+- Produção (`ng build`): endereço público da API, em `src/environments/environment.production.ts`.
 
 ---
 

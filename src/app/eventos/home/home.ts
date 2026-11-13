@@ -13,6 +13,7 @@ export class Home {
   eventos: Evento[] = [];
   categorias: { id: number; nome: string }[] = [];
   carregando = true;
+  demorando = false;
   erro = '';
 
   busca = '';
@@ -21,6 +22,13 @@ export class Home {
   data = '';
 
   constructor(private eventoService: EventoService, private cdr: ChangeDetectorRef) {
+    // no plano gratuito da nuvem, a API "dorme" quando ninguém usa e leva um tempo para acordar:
+    // se a resposta demorar, a tela explica o motivo em vez de parecer travada
+    const aviso = setTimeout(() => {
+      this.demorando = true;
+      this.cdr.markForCheck();
+    }, 4000);
+
     // a vitrine mostra só o que ainda vai acontecer, do mais próximo ao mais distante (GET /eventos/futuros)
     this.eventoService.listarFuturos().subscribe({
       next: eventos => {
@@ -30,6 +38,7 @@ export class Home {
       error: erro => this.erro = mensagemDeErro(erro)
     }).add(() => {
       // .add() roda no fim, com sucesso ou com erro
+      clearTimeout(aviso);
       this.carregando = false;
       this.cdr.markForCheck();
     });

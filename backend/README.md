@@ -76,6 +76,19 @@ A API fica em `http://localhost:8080`. Na primeira execução, o Maven baixa as 
    ```
 3. Na pasta `backend`, rode `./mvnw spring-boot:run` (no Windows: `mvnw.cmd spring-boot:run`).
 
+### Na nuvem (Docker)
+
+O `Dockerfile` desta pasta compila e roda a API num container (usado no Render). A conexão com o banco vem de variáveis de ambiente; sem elas, valem os padrões do Codespaces:
+
+| Variável | Padrão (Codespaces) |
+|---|---|
+| `DB_URL` | `jdbc:mysql://localhost:3306/conectaevent?createDatabaseIfNotExist=true` |
+| `DB_USERNAME` | `conecta` |
+| `DB_PASSWORD` | `conecta123` |
+| `PORT` | `8080` |
+
+O container ativa o perfil `nuvem` (`application-nuvem.properties`): sem SQL no log e com o fuso de Brasília no banco e no Java, para a regra das 48 horas não errar em 3 horas. Passo a passo da publicação: [PUBLICACAO.md](../PUBLICACAO.md).
+
 ### Dados de exemplo
 
 A cada início, as tabelas são recriadas (`ddl-auto=create`) e o arquivo `src/main/resources/import.sql` carrega 5 usuários, 5 categorias, 5 eventos, 6 ingressos e 1 reembolso pendente. As datas dos eventos são relativas ao dia atual:
