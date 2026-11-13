@@ -188,3 +188,7 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   font-weight: 700;
   color: $laranja-escuro;
 }
+// API fora do ar ou outro erro ao buscar os eventos
+.vazio.erro {
+  color: #c53030;
+}

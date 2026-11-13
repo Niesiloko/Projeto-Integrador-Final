@@ -1,6 +1,46 @@
 # ConectaEvent
 
-> O backend REST (Spring Boot + MySQL) está na pasta [`backend/`](backend/README.md).
+Sistema web de eventos: o **organizador** publica eventos e acompanha as vendas; o **participante** compra ingressos (com QR Code) e pode pedir reembolso.
+
+- **Front-end:** Angular 22 + Angular Material (esta pasta)
+- **Back-end:** API REST em Spring Boot + MySQL (pasta [`backend/`](backend/README.md))
+
+O front usa a API em todas as telas: os dados ficam no MySQL, não no navegador.
+
+## Como rodar o sistema completo
+
+No GitHub Codespaces (o `.devcontainer` já instala Java, Maven, MySQL e Node), abra **dois terminais**:
+
+```bash
+# Terminal 1 – API (porta 8080)
+cd backend
+./mvnw spring-boot:run
+```
+
+```bash
+# Terminal 2 – site (porta 4200)
+npm install
+npm start
+```
+
+Abra a porta **4200**. O Angular repassa as chamadas `/api/...` para a API na porta 8080 (arquivo `proxy.conf.json`), então não é preciso deixar a porta 8080 pública.
+
+A cada início da API, o banco volta aos dados de exemplo (`backend/src/main/resources/import.sql`).
+
+### Contas de teste
+
+| Perfil | E-mail | Senha | O que vê no menu |
+|---|---|---|---|
+| Organizador | `ana@conectaevent.com` | `organizador123` | Dashboard, Criar evento, Meus eventos, Categorias |
+| Participante | `carla@email.com` | `participante123` | Meus ingressos |
+
+Na tela de cadastro, a pessoa escolhe se quer ser organizador ou participante. Sem login, dá para ver a vitrine de eventos e os detalhes de cada um.
+
+### Publicando o front em outro endereço
+
+Se o site for publicado separado da API, troque `API_URL` em `src/app/shared/api.ts` pelo endereço público da API (o CORS já está liberado no backend).
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
 

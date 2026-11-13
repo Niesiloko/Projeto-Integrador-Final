@@ -1,5 +1,8 @@
 <div class="page-container">
-  <ng-container *ngIf="logado; else entrar">
+  <p class="estado" *ngIf="carregando">Carregando indicadores...</p>
+  <p class="estado erro" *ngIf="erro" role="alert">{{ erro }}</p>
+
+  <ng-container *ngIf="!carregando && !erro">
     <div class="cabecalho">
       <h2>Dashboard</h2>
       <p class="subtitulo">Indicadores dos seus eventos, calculados a partir das vendas registradas.</p>
@@ -78,25 +81,6 @@
       </div>
     </ng-template>
 
-    <!-- volta o sistema para os dados de exemplo (útil antes de uma apresentação) -->
-    <div class="restaurar">
-      <ng-container *ngIf="!confirmandoRestauracao; else confirmar">
-        <button mat-button class="btn-restaurar" (click)="confirmandoRestauracao = true">
-          <mat-icon>restart_alt</mat-icon> Restaurar dados de demonstração
-        </button>
-      </ng-container>
-      <ng-template #confirmar>
-        <span>Isso apaga todos os dados deste navegador e carrega os exemplos de novo.</span>
-        <button mat-button class="btn-nao" (click)="confirmandoRestauracao = false">Cancelar</button>
-        <button mat-flat-button class="btn-sim" (click)="restaurarDemonstracao()">Restaurar</button>
-      </ng-template>
-    </div>
   </ng-container>
 
-  <ng-template #entrar>
-    <div class="vazio">
-      <p>Entre com sua conta para ver os indicadores dos seus eventos.</p>
-      <a routerLink="/login">Entrar</a>
-    </div>
-  </ng-template>
 </div>

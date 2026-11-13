@@ -7,15 +7,20 @@ import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 import { DetalheEvento } from './detalhe-evento/detalhe-evento';
 import { Categorias } from './categorias/categorias';
 import { Dashboard } from './dashboard/dashboard';
+import { perfilGuard } from '../shared/perfil.guard';
+
+// canActivate: só o perfil certo abre a tela (a API também confere e responde 403)
+const organizador = { canActivate: [perfilGuard('ORGANIZADOR')] };
+const participante = { canActivate: [perfilGuard('PARTICIPANTE')] };
 
 const routes: Routes = [
   { path: '', redirectTo: 'meus-eventos', pathMatch: 'full' },
-  { path: 'criar-evento', component: CriarEvento },
-  { path: 'editar-evento/:id', component: CriarEvento },
-  { path: 'categorias', component: Categorias },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'meus-eventos', component: MeusEventos },
-  { path: 'meus-ingressos', component: MeusIngressos },
+  { path: 'criar-evento', component: CriarEvento, ...organizador },
+  { path: 'editar-evento/:id', component: CriarEvento, ...organizador },
+  { path: 'categorias', component: Categorias, ...organizador },
+  { path: 'dashboard', component: Dashboard, ...organizador },
+  { path: 'meus-eventos', component: MeusEventos, ...organizador },
+  { path: 'meus-ingressos', component: MeusIngressos, ...participante },
   { path: 'cadastro-evento', component: CadastroEvento },
   { path: 'detalhe/:id', component: DetalheEvento },
 

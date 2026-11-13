@@ -83,6 +83,16 @@ $fundo-pagina: #fdf7f7;
   font-size: 14px;
   font-weight: 500;
   color: $cinza-texto;
+
+  // selo com o perfil de quem está logado
+  .perfil {
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, .06);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 }
 
 // em celular, esconde o nome do usuário para o cabeçalho caber

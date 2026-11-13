@@ -203,3 +203,20 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
     color: #c53030;
   }
 }
+.estado {
+  text-align: center;
+  color: #718096;
+  padding: 24px;
+
+  &.erro { color: #c53030; }
+
+  a {
+    color: #ff5500;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+.campo-motivo {
+  width: 100%;
+}

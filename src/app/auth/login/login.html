@@ -22,7 +22,9 @@
     </mat-card-content>
 
     <mat-card-actions class="auth-actions">
-      <button mat-flat-button color="primary" class="btn-block" (click)="fazerLogin()">Entrar</button>
+      <button mat-flat-button color="primary" class="btn-block" [disabled]="entrando" (click)="fazerLogin()">
+        {{ entrando ? 'Entrando...' : 'Entrar' }}
+      </button>
       <p class="auth-link">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
     </mat-card-actions>
 

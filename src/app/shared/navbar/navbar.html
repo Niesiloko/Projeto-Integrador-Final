@@ -18,6 +18,8 @@
         <span matListItemTitle>Home</span>
       </a>
 
+      <!-- telas do organizador -->
+      <ng-container *ngIf="auth.ehOrganizador">
       <a mat-list-item routerLink="/eventos/dashboard" routerLinkActive="item-ativo"
          (click)="fecharSeCelular(menu)">
         <mat-icon matListItemIcon>insights</mat-icon>
@@ -36,16 +38,18 @@
         <span matListItemTitle>Meus eventos</span>
       </a>
 
-      <a mat-list-item routerLink="/eventos/meus-ingressos" routerLinkActive="item-ativo"
-         (click)="fecharSeCelular(menu)">
-        <mat-icon matListItemIcon>confirmation_number</mat-icon>
-        <span matListItemTitle>Meus ingressos</span>
-      </a>
-
       <a mat-list-item routerLink="/eventos/categorias" routerLinkActive="item-ativo"
          (click)="fecharSeCelular(menu)">
         <mat-icon matListItemIcon>label</mat-icon>
         <span matListItemTitle>Categorias</span>
+      </a>
+      </ng-container>
+
+      <!-- telas do participante -->
+      <a mat-list-item *ngIf="auth.ehParticipante" routerLink="/eventos/meus-ingressos" routerLinkActive="item-ativo"
+         (click)="fecharSeCelular(menu)">
+        <mat-icon matListItemIcon>confirmation_number</mat-icon>
+        <span matListItemTitle>Meus ingressos</span>
       </a>
     </mat-nav-list>
 
@@ -64,6 +68,7 @@
       <ng-container *ngIf="auth.estaLogado; else entrar">
         <span class="usuario">
           <mat-icon>account_circle</mat-icon> {{ auth.usuarioLogado?.nome }}
+          <small class="perfil">{{ auth.ehOrganizador ? 'Organizador' : 'Participante' }}</small>
         </span>
         <button mat-button (click)="sair()">
           <mat-icon>logout</mat-icon> Sair

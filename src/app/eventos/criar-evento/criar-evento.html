@@ -3,7 +3,7 @@
     <mat-card-header>
       <mat-card-title>{{ idEdicao ? 'Editar Evento' : 'Criar Novo Evento' }}</mat-card-title>
       <mat-card-subtitle>
-        {{ idEdicao ? 'Altere as informações e salve. Os ingressos já vendidos são atualizados.' : 'Preencha as informações principais para publicar seu evento' }}
+        {{ idEdicao ? 'Altere as informações e salve. Os ingressos já vendidos mostram os dados novos.' : 'Preencha as informações principais para publicar seu evento' }}
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -55,12 +55,14 @@
         <mat-label>Descrição Completa</mat-label>
         <textarea matInput [(ngModel)]="evento.descricao" rows="5" placeholder="Detalhes sobre a programação, palestrantes..."></textarea>
       </mat-form-field>
+
+      <p class="erro" *ngIf="erro" role="alert">{{ erro }}</p>
     </mat-card-content>
 
     <mat-card-actions align="end">
       <button mat-button class="btn-cancelar" routerLink="/eventos/meus-eventos">Cancelar</button>
-      <button mat-flat-button class="btn-primary-sympla" (click)="salvarEvento()">
-        {{ idEdicao ? 'Salvar alterações' : 'Publicar Evento' }}
+      <button mat-flat-button class="btn-primary-sympla" [disabled]="salvando" (click)="salvarEvento()">
+        {{ salvando ? 'Salvando...' : idEdicao ? 'Salvar alterações' : 'Publicar Evento' }}
       </button>
     </mat-card-actions>
   </mat-card>

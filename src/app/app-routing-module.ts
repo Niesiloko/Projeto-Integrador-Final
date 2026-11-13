@@ -13,7 +13,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./eventos/eventos-module').then(m => m.EventosModule)
   },
-  { path: '**', redirectTo: 'eventos/meus-eventos' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

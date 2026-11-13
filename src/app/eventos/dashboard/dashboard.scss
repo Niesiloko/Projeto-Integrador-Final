@@ -158,49 +158,10 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   font-size: 13px;
 }
 
-// ---- restaurar demonstração ----
-.restaurar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 28px;
-  padding-top: 16px;
-  border-top: 1px solid $cinza-fundo;
-
-  span {
-    color: $vermelho;
-    font-size: 13px;
-  }
-}
-
-.btn-restaurar,
-.btn-nao {
-  color: $cinza-texto !important;
-}
-
-.btn-sim {
-  background-color: $vermelho !important;
-  color: $branco !important;
-  border-radius: 20px;
-}
-
-// ---- estados vazios ----
-.vazio {
+// carregando ou erro ao buscar os dados na API
+.estado {
   text-align: center;
-  padding: 48px 16px;
-  color: $cinza-claro;
+  color: #718096;
 
-  a {
-    display: inline-block;
-    margin-top: 12px;
-    background: $laranja;
-    color: $branco;
-    padding: 10px 24px;
-    border-radius: 24px;
-    text-decoration: none;
-
-    &:hover { background: $laranja-escuro; }
-  }
+  &.erro { color: #c53030; }
 }

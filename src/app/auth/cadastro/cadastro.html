@@ -18,12 +18,25 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Senha</mat-label>
-        <input matInput type="password" [(ngModel)]="senha" required>
+        <input matInput type="password" [(ngModel)]="senha" minlength="6" required>
+        <mat-hint>Mínimo de 6 caracteres</mat-hint>
       </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Quero usar o Conecta Event para</mat-label>
+        <mat-select [(ngModel)]="perfil" required>
+          <mat-option value="PARTICIPANTE">Comprar ingressos (Participante)</mat-option>
+          <mat-option value="ORGANIZADOR">Publicar e gerenciar eventos (Organizador)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <p class="erro" *ngIf="erro" role="alert">{{ erro }}</p>
     </mat-card-content>
 
     <mat-card-actions class="auth-actions">
-      <button mat-flat-button color="primary" class="btn-block" (click)="cadastrar()">Cadastrar</button>
+      <button mat-flat-button color="primary" class="btn-block" [disabled]="salvando" (click)="cadastrar()">
+        {{ salvando ? 'Criando conta...' : 'Cadastrar' }}
+      </button>
       <p class="auth-link">Já possui uma conta? <a routerLink="/login">Faça login</a></p>
     </mat-card-actions>
   </mat-card>

@@ -1,21 +1,28 @@
 # Documentação da API – Conecta Event
 
-URL base: `http://localhost:8080`. Todas as rotas exigem autenticação **HTTP Basic**.
+URL base: `http://localhost:8080`. As rotas exigem autenticação **HTTP Basic**, exceto as públicas listadas abaixo.
+O nome de usuário é o **e-mail** cadastrado na tabela `usuario`; a senha é conferida com o hash BCrypt guardado no banco.
 
-| Usuário | Senha | Perfil |
+| Usuário (e-mail) | Senha | Perfil |
 |---|---|---|
-| `organizador` | `organizador123` | ORGANIZADOR |
-| `participante` | `participante123` | PARTICIPANTE |
+| `ana@conectaevent.com` | `organizador123` | ORGANIZADOR |
+| `carla@email.com` | `participante123` | PARTICIPANTE |
+
+Os demais usuários do `import.sql` usam a senha do seu perfil (`bruno@conectaevent.com`: `organizador123`; `diego@email.com` e `elisa@email.com`: `participante123`).
 
 ## Permissões
 
 | Operação | Quem pode |
 |---|---|
-| Qualquer `GET` | Qualquer usuário autenticado |
+| `GET /eventos/futuros`, `GET /eventos/{id}`, `GET /eventos/{id}/vagas` | Qualquer pessoa, sem login (vitrine do site) |
+| `POST /usuarios/cadastro` | Qualquer pessoa, sem login (criar conta) |
+| Os demais `GET` | Qualquer usuário autenticado |
 | `POST`/`PUT`/`DELETE` em `/categorias`, `/eventos` e `/usuarios` | ORGANIZADOR |
 | `POST /ingressos/check-in/{codigo}` | ORGANIZADOR |
 | `POST /reembolsos/{id}/aprovar` e `/recusar` | ORGANIZADOR |
 | `POST`/`PUT`/`DELETE` em `/ingressos` e `/reembolsos` | PARTICIPANTE |
+
+A senha é enviada no JSON (`"senha": "..."`, de 6 a 100 caracteres), é gravada como hash BCrypt e **nunca** aparece nas respostas.
 
 Sem credenciais ou com senha errada, a resposta é **401 Unauthorized**. Com um usuário autenticado sem o perfil exigido, é **403 Forbidden**.
 
@@ -69,11 +76,13 @@ Formato dos erros:
 | Método | Rota | Descrição |
 |---|---|---|
 | GET | `/usuarios?perfil=ORGANIZADOR` | Lista os usuários, com filtro opcional por perfil |
+| GET | `/usuarios/me` | Usuário logado (usado pelo front no login para conferir e-mail e senha) |
 | GET | `/usuarios/{id}` | Busca um usuário |
 | GET | `/usuarios/{id}/eventos` | Eventos organizados pelo usuário |
 | GET | `/usuarios/{id}/ingressos` | Ingressos comprados pelo usuário |
 | GET | `/usuarios/{id}/reembolsos?status=PENDENTE` | Reembolsos dos eventos do organizador (padrão: PENDENTE) |
-| POST | `/usuarios` | Cria um usuário (409 se o e-mail já existir) |
+| POST | `/usuarios` | Cria um usuário (409 se o e-mail já existir); a `senha` é opcional |
+| POST | `/usuarios/cadastro` | **Público.** Cria a própria conta; a `senha` é obrigatória (400 sem senha, 409 se o e-mail já existir) |
 | PUT | `/usuarios/{id}` | Atualiza um usuário |
 | DELETE | `/usuarios/{id}` | Exclui um usuário (409 se ele tiver eventos ou ingressos) |
 

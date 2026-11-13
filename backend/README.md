@@ -46,7 +46,7 @@ backend/
     ├── servicos/       regras de negócio
     ├── recursos/       controllers REST
     ├── excecoes/       exceções personalizadas e @RestControllerAdvice
-    ├── configuracoes/  Spring Security (HTTP Basic, usuários em memória)
+    ├── configuracoes/  Spring Security (HTTP Basic com os usuários do banco, CORS)
     └── dtos/           respostas que não são entidades (vagas do evento)
 ```
 
@@ -85,12 +85,17 @@ A cada início, as tabelas são recriadas (`ddl-auto=create`) e o arquivo `src/m
 
 ## Usuários de teste (HTTP Basic)
 
-| Usuário | Senha | Perfil | Pode |
+O login usa os usuários da tabela `usuario`: o **nome de usuário é o e-mail** e o perfil do usuário define o que ele pode fazer. As senhas ficam guardadas como hash **BCrypt** (nunca em texto puro) e não aparecem nas respostas da API.
+
+| E-mail | Senha | Perfil | Pode |
 |---|---|---|---|
-| `organizador` | `organizador123` | ORGANIZADOR | cadastrar categorias, eventos e usuários; aprovar ou recusar reembolsos; fazer check-in |
-| `participante` | `participante123` | PARTICIPANTE | comprar ingressos; pedir, alterar e cancelar reembolso |
+| `ana@conectaevent.com` | `organizador123` | ORGANIZADOR | cadastrar categorias, eventos e usuários; aprovar ou recusar reembolsos; fazer check-in |
+| `bruno@conectaevent.com` | `organizador123` | ORGANIZADOR | o mesmo |
+| `carla@email.com` | `participante123` | PARTICIPANTE | comprar ingressos; pedir, alterar e cancelar reembolso |
+| `diego@email.com`, `elisa@email.com` | `participante123` | PARTICIPANTE | o mesmo |
 
 Os dois perfis podem fazer qualquer consulta (`GET`). As senhas são apenas de teste.
+Novos usuários podem criar a própria conta pela rota pública `POST /usuarios/cadastro` (é o que a tela de cadastro do site usa).
 
 ## Testes com Postman
 
@@ -99,6 +104,17 @@ Os dois perfis podem fazer qualquer consulta (`GET`). As senhas são apenas de t
 3. Execute as pastas **na ordem** (01 a 06). Os ids usados nas requisições contam com essa ordem.
 
 As variáveis (`baseUrl`, usuários e senhas) estão na própria coleção.
+
+## Integração com o front-end
+
+O front-end Angular (raiz do repositório) usa esta API em todas as telas; os dados não ficam mais no navegador.
+
+- **Login:** a tela de login chama `GET /usuarios/me` com o e-mail e a senha (HTTP Basic). Se a API aceitar, o front guarda o usuário e envia a credencial em todas as requisições seguintes (interceptor `src/app/shared/auth.interceptor.ts`).
+- **Rotas públicas:** a vitrine (`GET /eventos/futuros`, `/eventos/{id}` e `/eventos/{id}/vagas`) e o cadastro (`POST /usuarios/cadastro`) funcionam sem login.
+- **CORS:** liberado para o front poder chamar a API de outro endereço.
+- **Janela de login do navegador:** quando a requisição vem do front (cabeçalho `X-Requested-With`), o 401 não traz o `WWW-Authenticate`, e a mensagem de erro aparece na própria tela.
+
+Como rodar os dois juntos: veja o [README principal](../README.md).
 
 ## Documentação
 

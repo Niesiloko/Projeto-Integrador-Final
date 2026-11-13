@@ -4,6 +4,8 @@ import localePt from '@angular/common/locales/pt';
 import { BrowserModule,  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './shared/auth.interceptor';
 
 
 import { App } from './app';
@@ -23,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 // formatos brasileiros nos pipes: R$ 25,00 e datas em português
 registerLocaleData(localePt);
@@ -46,11 +49,14 @@ registerLocaleData(localePt);
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    MatSidenavModule, 
-    MatListModule
+    MatSidenavModule,
+    MatListModule,
+    MatSelectModule
   ],
   providers: [
     provideAnimations(),
+    // HttpClient para falar com a API; o interceptor coloca a autenticação em toda requisição
+    provideHttpClient(withInterceptors([authInterceptor])),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' }
   ],

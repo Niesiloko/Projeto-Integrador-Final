@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,13 @@ public class UsuarioRecurso {
         return usuarioServico.listar(perfil);
     }
 
+    // Quem está logado: o front chama esta rota no login para validar e-mail e senha
+    // e descobrir o id, o nome e o perfil do usuário.
+    @GetMapping ("me")
+    public Usuario usuarioLogado(Authentication autenticacao) {
+        return usuarioServico.buscarPorEmail(autenticacao.getName());
+    }
+
     @GetMapping ("{id}")
     public Usuario buscarPorId(@PathVariable Integer id) {
         return usuarioServico.buscarPorId(id);
@@ -76,6 +84,13 @@ public class UsuarioRecurso {
     @ResponseStatus (HttpStatus.CREATED)
     public Usuario salvar(@Valid @RequestBody Usuario usuario) {
         return usuarioServico.salvar(usuario);
+    }
+
+    // Cadastro pelo site, sem login (rota liberada na SegurancaConfiguracao).
+    @PostMapping ("cadastro")
+    @ResponseStatus (HttpStatus.CREATED)
+    public Usuario cadastrar(@Valid @RequestBody Usuario usuario) {
+        return usuarioServico.cadastrar(usuario);
     }
 
     @PutMapping ("{id}")

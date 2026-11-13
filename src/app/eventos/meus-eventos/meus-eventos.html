@@ -12,10 +12,13 @@
     </button>
   </div>
 
+  <p class="estado" *ngIf="carregando">Carregando seus eventos...</p>
+  <p class="estado erro" *ngIf="erro" role="alert">{{ erro }}</p>
+
   <div class="events-grid" *ngIf="meusEventos.length > 0; else vazio">
     <mat-card appearance="outlined" *ngFor="let ev of meusEventos" class="event-item-card">
       <div class="card-topo">
-        <span class="categoria">{{ categoriaService.nome(ev.categoriaId) }}</span>
+        <span class="categoria">{{ ev.categoriaNome }}</span>
         <h3>{{ ev.titulo }}</h3>
       </div>
 
@@ -49,7 +52,10 @@
 <div class="reembolsos" *ngIf="resumos[ev.id] && resumos[ev.id].pendentes.length > 0">
   <h4>Reembolsos pendentes</h4>
   <div class="reembolso-item" *ngFor="let p of resumos[ev.id].pendentes">
-    <span>{{ p.titular }}</span>
+    <span class="pedido">
+      {{ p.ingresso.titular }}
+      <small>"{{ p.motivo }}"</small>
+    </span>
     <span class="decisao" *ngIf="confirmandoReembolso?.id !== p.id; else confirmarReembolso">
       <button mat-button class="btn-recusar" (click)="confirmandoReembolso = { id: p.id, acao: 'recusar' }">Recusar</button>
       <button mat-button class="btn-aprovar" (click)="confirmandoReembolso = { id: p.id, acao: 'aprovar' }">Aprovar</button>
@@ -89,7 +95,7 @@
   </div>
 
   <ng-template #vazio>
-    <div class="vazio">
+    <div class="vazio" *ngIf="!carregando && !erro">
       <div class="vazio-icone">
         <mat-icon>event</mat-icon>
       </div>

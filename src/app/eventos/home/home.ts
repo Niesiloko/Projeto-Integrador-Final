@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Evento } from '../../shared/navbar/evento.model';
 import { EventoService } from '../../shared/navbar/evento.service';
-import { Categoria } from '../../shared/navbar/categoria.model';
-import { CategoriaService } from '../../shared/navbar/categoria.service';
+import { mensagemDeErro } from '../../shared/api';
 
 @Component({
   selector: 'app-home',
@@ -12,24 +11,38 @@ import { CategoriaService } from '../../shared/navbar/categoria.service';
 })
 export class Home {
   eventos: Evento[] = [];
+  categorias: { id: number; nome: string }[] = [];
+  carregando = true;
+  erro = '';
 
   busca = '';
   local = '';
   categoriaId: number | null = null;
   data = '';
 
-  constructor(private eventoService: EventoService, public categoriaService: CategoriaService) {
-    // a vitrine mostra só o que ainda vai acontecer, do mais próximo ao mais distante
-    const agora = Date.now();
-    this.eventos = this.eventoService.listar()
-      .filter(e => new Date(e.data).getTime() > agora)
-      .sort((a, b) => a.data.localeCompare(b.data));
+  constructor(private eventoService: EventoService, private cdr: ChangeDetectorRef) {
+    // a vitrine mostra só o que ainda vai acontecer, do mais próximo ao mais distante (GET /eventos/futuros)
+    this.eventoService.listarFuturos().subscribe({
+      next: eventos => {
+        this.eventos = eventos;
+        this.categorias = this.categoriasUsadas(eventos);
+      },
+      error: erro => this.erro = mensagemDeErro(erro)
+    }).add(() => {
+      // .add() roda no fim, com sucesso ou com erro
+      this.carregando = false;
+      this.cdr.markForCheck();
+    });
   }
 
-  // só as categorias que têm algum evento aparecem no filtro
-  get categorias(): Categoria[] {
-    const usadas = new Set(this.eventos.map(e => e.categoriaId));
-    return this.categoriaService.listar().filter(c => usadas.has(c.id));
+  // só as categorias que têm algum evento aparecem no filtro.
+  // Calculado uma vez (e não num getter): um getter criaria objetos novos a cada redesenho,
+  // o *ngFor recriaria as opções e o Angular entraria em loop (erro NG0103).
+  private categoriasUsadas(eventos: Evento[]): { id: number; nome: string }[] {
+    const unicas = new Map(eventos.map(e => [e.categoriaId, e.categoriaNome]));
+    return [...unicas.entries()]
+      .map(([id, nome]) => ({ id, nome }))
+      .sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
   get eventosFiltrados(): Evento[] {

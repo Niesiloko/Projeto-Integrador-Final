@@ -1,4 +1,6 @@
 <div class="page-container">
+  <p class="carregando" *ngIf="carregando && !evento">Carregando evento...</p>
+
   <ng-container *ngIf="evento; else naoEncontrado">
     <mat-card appearance="outlined" class="detalhe-card">
       <div class="capa">
@@ -7,7 +9,7 @@
       </div>
 
       <div class="conteudo">
-        <span class="categoria">{{ categoriaService.nome(evento.categoriaId) }}</span>
+        <span class="categoria">{{ evento.categoriaNome }}</span>
         <h1>{{ evento.titulo }}</h1>
 
         <div class="info">
@@ -47,9 +49,18 @@
             </span>
           </div>
 
-          <button mat-flat-button class="btn-primary-sympla" *ngIf="!encerrado && !jaComprado && !bloqueado && !esgotado" (click)="comprar()">
-            Comprar ingresso
+          <!-- organizador não compra ingresso: a API responderia 403 -->
+          <span class="aviso-perfil" *ngIf="auth.ehOrganizador && !encerrado && !esgotado">
+            <mat-icon>info</mat-icon> Entre com uma conta de participante para comprar.
+          </span>
+
+          <button mat-flat-button class="btn-primary-sympla"
+                  *ngIf="!auth.ehOrganizador && !encerrado && !jaComprado && !bloqueado && !esgotado"
+                  [disabled]="comprando" (click)="comprar()">
+            {{ comprando ? 'Comprando...' : 'Comprar ingresso' }}
           </button>
+
+          <p class="erro-compra" *ngIf="erro" role="alert">{{ erro }}</p>
 
           <ng-container *ngIf="jaComprado" [ngTemplateOutlet]="comprado"></ng-container>
 
@@ -67,7 +78,7 @@
   </ng-container>
 
   <ng-template #naoEncontrado>
-    <div class="vazio">
+    <div class="vazio" *ngIf="!carregando">
       <p>Evento não encontrado.</p>
       <a routerLink="/">Voltar para a Home</a>
     </div>
