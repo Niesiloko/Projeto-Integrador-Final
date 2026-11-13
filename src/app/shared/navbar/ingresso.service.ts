@@ -51,6 +51,16 @@ export class IngressoService {
     }).pipe(map(paraIngresso));
   }
 
+  // troca o nome de quem vai usar o ingresso (PUT /ingressos/{id}); a API só permite em ingresso CONFIRMADO.
+  // A validação da API exige evento e participante no corpo, mesmo que eles não mudem.
+  atualizarTitular(ingresso: Ingresso, titular: string): Observable<Ingresso> {
+    return this.http.put<IngressoApi>(`${API_URL}/ingressos/${ingresso.id}`, {
+      evento: { id: ingresso.eventoId },
+      participante: { id: ingresso.participanteId },
+      titular: titular.trim()
+    }).pipe(map(paraIngresso));
+  }
+
   solicitarReembolso(ingressoId: number, motivo: string): Observable<Reembolso> {
     return this.http.post<ReembolsoApi>(`${API_URL}/reembolsos`, { ingresso: { id: ingressoId }, motivo: motivo.trim() })
       .pipe(map(paraReembolso));

@@ -36,9 +36,27 @@
 
         <div class="info">
           <mat-icon>person</mat-icon>
-          <div>
+          <div class="titular">
             <small>Participante</small>
-            <span>{{ ing.titular }}</span>
+            <ng-container *ngIf="editandoTitular !== ing.id; else editar">
+              <span>
+                {{ ing.titular }}
+                <!-- só ingresso CONFIRMADO pode trocar de titular (regra da API) -->
+                <button mat-icon-button class="btn-editar-titular" *ngIf="ing.status === 'CONFIRMADO'"
+                        (click)="editarTitular(ing)" aria-label="Editar nome do titular">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </span>
+            </ng-container>
+
+            <ng-template #editar>
+              <div class="editar-titular">
+                <input [(ngModel)]="novoTitular" maxlength="100" aria-label="Novo nome do titular"
+                       (keyup.enter)="salvarTitular(ing)" />
+                <button mat-button class="btn-nao" (click)="editandoTitular = undefined">Cancelar</button>
+                <button mat-flat-button class="btn-salvar" [disabled]="enviando" (click)="salvarTitular(ing)">Salvar</button>
+              </div>
+            </ng-template>
           </div>
         </div>
 
