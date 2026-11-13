@@ -18,6 +18,10 @@ export class MeusIngressos {
   carregando = true;
   erro = '';
 
+  // edição do titular: id do ingresso sendo editado e o nome digitado
+  editandoTitular?: number;
+  novoTitular = '';
+
   // a confirmação e o resultado aparecem no próprio cartão do ingresso
   confirmandoReembolso?: number;
   motivo = '';
@@ -67,9 +71,40 @@ export class MeusIngressos {
     return this.ingressoService.ehUltimoReembolso(this.ingressos, ing);
   }
 
+  // clique no lápis: troca o nome por um campo de texto
+  editarTitular(ing: Ingresso) {
+    delete this.avisos[ing.id];
+    this.confirmandoReembolso = undefined;
+    this.novoTitular = ing.titular;
+    this.editandoTitular = ing.id;
+  }
+
+  salvarTitular(ing: Ingresso) {
+    const nome = this.novoTitular.trim();
+    if (nome.length < 3) {
+      this.avisos[ing.id] = { texto: 'O nome do titular deve ter pelo menos 3 caracteres.', erro: true };
+      return;
+    }
+    this.enviando = true;
+    this.ingressoService.atualizarTitular(ing, nome).subscribe({
+      // a resposta do PUT já é o ingresso atualizado: troca no cartão na hora, sem buscar a lista de novo
+      next: atualizado => {
+        this.ingressos = this.ingressos.map(i => i.id === atualizado.id ? atualizado : i);
+        this.editandoTitular = undefined;
+        this.avisos[ing.id] = { texto: 'Titular atualizado.', erro: false };
+      },
+      // ex.: 409 "Só é possível alterar ingressos CONFIRMADOS"
+      error: erro => this.avisos[ing.id] = { texto: mensagemDeErro(erro), erro: true }
+    }).add(() => {
+      this.enviando = false;
+      this.cdr.markForCheck();
+    });
+  }
+
   // primeiro clique: pede o motivo e a confirmação no cartão
   pedirReembolso(ing: Ingresso) {
     delete this.avisos[ing.id];
+    this.editandoTitular = undefined;
     this.motivo = '';
     this.confirmandoReembolso = ing.id;
   }

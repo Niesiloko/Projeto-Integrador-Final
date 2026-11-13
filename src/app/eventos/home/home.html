@@ -37,7 +37,8 @@
 
   <ng-template #vazio>
     <p class="vazio" [class.erro]="erro">
-      {{ carregando ? 'Carregando eventos...'
+      {{ carregando && demorando ? 'Acordando o servidor... No plano gratuito da nuvem, o primeiro acesso pode levar até 2 minutos.'
+        : carregando ? 'Carregando eventos...'
         : erro ? erro
         : eventos.length === 0 ? 'Ainda não há eventos publicados.'
         : 'Nenhum evento encontrado com esses filtros.' }}

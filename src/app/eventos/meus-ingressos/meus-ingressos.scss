@@ -220,3 +220,50 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
 .campo-motivo {
   width: 100%;
 }
+
+// nome do titular com o lápis de edição ao lado
+.titular {
+  flex: 1;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+.btn-editar-titular {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 4px !important;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $cinza-texto;
+  }
+}
+
+.editar-titular {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+
+  input {
+    flex: 1;
+    min-width: 140px;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font: inherit;
+  }
+}
+
+.btn-salvar {
+  background-color: $laranja !important;
+  color: $branco !important;
+  border-radius: 24px;
+}

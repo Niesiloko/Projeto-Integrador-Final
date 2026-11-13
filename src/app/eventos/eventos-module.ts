@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 import { EventosRoutingModule } from './eventos-routing-module';
-import { CadastroEvento } from './cadastro-evento/cadastro-evento';
 import { CriarEvento } from './criar-evento/criar-evento';
 import { MeusEventos } from './meus-eventos/meus-eventos';
 import { MeusIngressos } from './meus-ingressos/meus-ingressos';
@@ -21,7 +20,7 @@ import { Categorias } from './categorias/categorias';
 import { Dashboard } from './dashboard/dashboard';
 
 @NgModule({
-  declarations: [CadastroEvento, CriarEvento, MeusEventos, MeusIngressos, Home, DetalheEvento, Categorias, Dashboard],
+  declarations: [CriarEvento, MeusEventos, MeusIngressos, Home, DetalheEvento, Categorias, Dashboard],
   imports: [
     CommonModule,
     MatIconModule,
@@ -34,6 +33,5 @@ import { Dashboard } from './dashboard/dashboard';
     MatButtonModule,
     MatSelectModule,
   ],
-  exports: [CadastroEvento],
 })
 export class EventosModule {}
