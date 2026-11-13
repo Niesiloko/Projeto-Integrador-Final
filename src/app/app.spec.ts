@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { AppModule } from './app-module';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
-      declarations: [App],
+      // o AppModule declara App e Navbar (usado em <app-navbar>) e já traz
+      // o Router (necessário para <router-outlet>)
+      imports: [AppModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
   });
 
@@ -20,6 +24,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, conecta-event');
+    // o nome do app aparece no topo da navbar: Conecta<strong>Event</strong>
+    expect(compiled.querySelector('.titulo-topo')?.textContent).toContain('ConectaEvent');
   });
 });
