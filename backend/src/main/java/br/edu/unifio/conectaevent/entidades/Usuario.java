@@ -1,5 +1,7 @@
 package br.edu.unifio.conectaevent.entidades;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,4 +37,11 @@ public class Usuario {
     @NotNull (message = "O perfil é obrigatório (ORGANIZADOR ou PARTICIPANTE)")
     @Enumerated (EnumType.STRING)
     private Perfil perfil;
+
+    // Senha de acesso, guardada criptografada (BCrypt).
+    // WRITE_ONLY: o JSON pode enviar a senha, mas ela nunca aparece nas respostas da API.
+    // Opcional no CRUD do organizador; obrigatória no cadastro pelo site (POST /usuarios/cadastro).
+    @JsonProperty (access = JsonProperty.Access.WRITE_ONLY)
+    @Size (min = 6, max = 100, message = "A senha deve ter entre 6 e 100 caracteres")
+    private String senha;
 }

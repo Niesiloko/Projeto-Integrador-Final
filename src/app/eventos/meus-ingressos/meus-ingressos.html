@@ -1,6 +1,13 @@
 <div class="page-container">
   <h2>Meus Ingressos</h2>
 
+  <p class="estado" *ngIf="carregando">Carregando seus ingressos...</p>
+  <p class="estado erro" *ngIf="erro" role="alert">{{ erro }}</p>
+  <div class="estado" *ngIf="!carregando && !erro && ingressos.length === 0">
+    <p>Você ainda não comprou ingressos.</p>
+    <a routerLink="/">Ver eventos disponíveis</a>
+  </div>
+
   <div class="tickets-grid">
     <mat-card appearance="outlined" *ngFor="let ing of ingressos" class="ticket-card">
       <div class="ticket-header">
@@ -57,13 +64,20 @@
   <ng-template #confirmar>
     <div class="confirmacao">
       <span>Solicitar o reembolso deste ingresso?</span>
-      <small class="ultimo-aviso" *ngIf="ingressoService.ehUltimoReembolso(ing)">
+      <mat-form-field appearance="outline" class="campo-motivo">
+        <mat-label>Motivo</mat-label>
+        <textarea matInput rows="2" maxlength="500" [(ngModel)]="motivo"
+                  placeholder="Ex: Não poderei comparecer"></textarea>
+      </mat-form-field>
+      <small class="ultimo-aviso" *ngIf="ehUltimoReembolso(ing)">
         Atenção: este é o seu último reembolso permitido neste evento. Se ele for aprovado,
         você não poderá comprar ingresso para este evento de novo.
       </small>
       <div>
         <button mat-button class="btn-nao" (click)="confirmandoReembolso = undefined">Não</button>
-        <button mat-flat-button class="btn-sim" (click)="reembolsar(ing)">Sim, solicitar</button>
+        <button mat-flat-button class="btn-sim" [disabled]="enviando" (click)="reembolsar(ing)">
+          {{ enviando ? 'Enviando...' : 'Sim, solicitar' }}
+        </button>
       </div>
     </div>
   </ng-template>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.edu.unifio.conectaevent.entidades.Perfil;
@@ -26,6 +27,9 @@ public class UsuarioServico {
     @Autowired
     private IngressoRepositorio ingressoRepositorio;
 
+    @Autowired
+    private PasswordEncoder codificadorSenha;
+
     public List<Usuario> listar(Perfil perfil) {
         if (perfil != null) {
             return usuarioRepositorio.findByPerfilOrderByNome(perfil);
@@ -41,12 +45,30 @@ public class UsuarioServico {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário com id " + id + " não encontrado."));
     }
 
+    // Usuário autenticado na requisição (o e-mail é o nome de usuário do HTTP Basic).
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepositorio.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário com e-mail " + email + " não encontrado."));
+    }
+
     public Usuario salvar(Usuario usuario) {
         usuario.setId(null);
         if (usuarioRepositorio.existsByEmailIgnoreCase(usuario.getEmail())) {
             throw new RegraNegocioException("Já existe um usuário com o e-mail " + usuario.getEmail() + ".");
         }
+        // A senha nunca é gravada como foi digitada: o BCrypt gera um "hash" que não pode ser desfeito.
+        if (usuario.getSenha() != null) {
+            usuario.setSenha(codificadorSenha.encode(usuario.getSenha()));
+        }
         return usuarioRepositorio.save(usuario);
+    }
+
+    // Cadastro pelo site (rota pública): igual ao salvar, mas a senha é obrigatória para poder entrar depois.
+    public Usuario cadastrar(Usuario usuario) {
+        if (usuario.getSenha() == null || usuario.getSenha().isBlank()) {
+            throw new RequisicaoInvalidaException("Informe uma senha para criar a conta.");
+        }
+        return salvar(usuario);
     }
 
     public Usuario atualizar(Integer id, Usuario dados) {
@@ -64,6 +86,10 @@ public class UsuarioServico {
         usuario.setNome(dados.getNome());
         usuario.setEmail(dados.getEmail());
         usuario.setPerfil(dados.getPerfil());
+        // Sem senha no JSON, mantém a atual.
+        if (dados.getSenha() != null) {
+            usuario.setSenha(codificadorSenha.encode(dados.getSenha()));
+        }
         return usuarioRepositorio.save(usuario);
     }
 

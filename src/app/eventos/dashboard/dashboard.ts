@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { forkJoin } from 'rxjs';
+import { Evento } from '../../shared/navbar/evento.model';
+import { Ingresso } from '../../shared/navbar/ingresso.model';
 import { EventoService } from '../../shared/navbar/evento.service';
 import { IngressoService } from '../../shared/navbar/ingresso.service';
-import { CategoriaService } from '../../shared/navbar/categoria.service';
 import { AuthService } from '../../shared/auth.service';
-import { DemoService } from '../../shared/demo.service';
+import { mensagemDeErro } from '../../shared/api';
 
 interface Barra {
   nome: string;
@@ -18,7 +20,8 @@ interface Barra {
   styleUrl: './dashboard.scss'
 })
 export class Dashboard {
-  logado = false;
+  carregando = true;
+  erro = '';
 
   // indicadores (KPIs), calculados dos eventos do organizador e dos ingressos deles
   eventosPublicados = 0;
@@ -33,29 +36,32 @@ export class Dashboard {
   receitaPorEvento: Barra[] = [];
   vendasPorCategoria: Barra[] = [];
 
-  confirmandoRestauracao = false;
-
   constructor(
     private eventoService: EventoService,
     private ingressoService: IngressoService,
-    private categoriaService: CategoriaService,
     private auth: AuthService,
-    private demo: DemoService
+    private cdr: ChangeDetectorRef
   ) {
-    this.calcular();
-  }
-
-  calcular() {
     const usuario = this.auth.usuarioLogado;
-    this.logado = !!usuario;
     if (!usuario) {
       return;
     }
+    forkJoin({
+      eventos: this.eventoService.listarDoOrganizador(usuario.id),
+      ingressos: this.ingressoService.listar()
+    }).subscribe({
+      next: ({ eventos, ingressos }) => this.calcular(eventos, ingressos),
+      error: erro => this.erro = mensagemDeErro(erro)
+    }).add(() => {
+      this.carregando = false;
+      this.cdr.markForCheck();
+    });
+  }
 
+  private calcular(eventos: Evento[], todos: Ingresso[]) {
     const agora = Date.now();
-    const eventos = this.eventoService.listarDoOrganizador(usuario.email);
     const ids = new Set(eventos.map(e => e.id));
-    const ingressos = this.ingressoService.listar().filter(i => ids.has(i.eventoId));
+    const ingressos = todos.filter(i => ids.has(i.eventoId));
 
     // venda = ingresso que não foi devolvido (reembolsado)
     const vendidos = ingressos.filter(i => i.status !== 'REEMBOLSADO');
@@ -83,14 +89,14 @@ export class Dashboard {
       })
       .sort((a, b) => b.valor - a.valor);
 
-    const porCategoria = new Map<number, number>();
+    const porCategoria = new Map<string, number>();
     for (const i of vendidos) {
-      const categoriaId = eventos.find(e => e.id === i.eventoId)!.categoriaId;
-      porCategoria.set(categoriaId, (porCategoria.get(categoriaId) ?? 0) + 1);
+      const categoria = eventos.find(e => e.id === i.eventoId)!.categoriaNome;
+      porCategoria.set(categoria, (porCategoria.get(categoria) ?? 0) + 1);
     }
     this.vendasPorCategoria = [...porCategoria.entries()]
-      .map(([id, qtd]) => ({
-        nome: this.categoriaService.nome(id),
+      .map(([nome, qtd]) => ({
+        nome,
         valor: qtd,
         detalhe: `${qtd} ${qtd === 1 ? 'ingresso' : 'ingressos'}`
       }))
@@ -101,14 +107,5 @@ export class Dashboard {
   largura(barra: Barra, lista: Barra[]): number {
     const maior = Math.max(...lista.map(b => b.valor));
     return maior > 0 ? (barra.valor / maior) * 100 : 0;
-  }
-
-  restaurarDemonstracao() {
-    this.confirmandoRestauracao = false;
-    this.demo.restaurar();
-    // a sessão foi apagada: entra de novo como o organizador da demonstração
-    const conta = DemoService.contas[0];
-    this.auth.login(conta.email, conta.senha);
-    this.calcular();
   }
 }

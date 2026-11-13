@@ -1,152 +1,114 @@
 import { Injectable } from '@angular/core';
-import { Evento } from './evento.model';
-import { Ingresso } from './ingresso.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { Ingresso, Reembolso } from './ingresso.model';
+import { EventoApi } from './evento.service';
+import { API_URL } from '../api';
 
+// Formatos do JSON da API (entidades Ingresso.java e Reembolso.java).
+interface IngressoApi {
+  id: number;
+  codigo: string;
+  titular: string;
+  valor: number;
+  status: Ingresso['status'];
+  evento: EventoApi;
+  participante: { id: number };
+}
+
+interface ReembolsoApi {
+  id: number;
+  motivo: string;
+  status: Reembolso['status'];
+  ingresso: IngressoApi;
+}
+
+// As regras (capacidade, um ingresso por pessoa, limite de reembolsos, prazo de 48 h)
+// são garantidas pelo backend. Aqui ficam só as chamadas à API e os cálculos para a tela avisar antes.
 @Injectable({ providedIn: 'root' })
 export class IngressoService {
-  private chave = 'ingressos';
-  private prazoReembolsoHoras = 48;
-
-  // depois de 2 reembolsos no mesmo evento, a pessoa não pode mais comprar ingresso para ele
+  // mesmo valor de IngressoServico.LIMITE_REEMBOLSOS_POR_EVENTO no backend
   readonly limiteReembolsosPorEvento = 2;
 
-  listar(): Ingresso[] {
-    return JSON.parse(localStorage.getItem(this.chave) || '[]');
+  constructor(private http: HttpClient) {}
+
+  // todos os ingressos (o organizador filtra os dos seus eventos)
+  listar(): Observable<Ingresso[]> {
+    return this.http.get<IngressoApi[]>(`${API_URL}/ingressos`).pipe(map(lista => lista.map(paraIngresso)));
   }
 
-  private gravar(lista: Ingresso[]) {
-    localStorage.setItem(this.chave, JSON.stringify(lista));
+  // "Meus ingressos" do participante
+  listarDoUsuario(participanteId: number): Observable<Ingresso[]> {
+    return this.http.get<IngressoApi[]>(`${API_URL}/usuarios/${participanteId}/ingressos`)
+      .pipe(map(lista => lista.map(paraIngresso)));
   }
 
-  listarDoUsuario(email: string): Ingresso[] {
-    return this.listar().filter(i => i.compradorEmail === email);
+  comprar(eventoId: number, participanteId: number, titular: string): Observable<Ingresso> {
+    return this.http.post<IngressoApi>(`${API_URL}/ingressos`, {
+      evento: { id: eventoId },
+      participante: { id: participanteId },
+      titular
+    }).pipe(map(paraIngresso));
   }
 
-  // vagas ocupadas: todo ingresso que não foi reembolsado (o reembolsado libera a vaga)
-  vendidosDoEvento(eventoId: number): number {
-    return this.listar().filter(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO').length;
+  solicitarReembolso(ingressoId: number, motivo: string): Observable<Reembolso> {
+    return this.http.post<ReembolsoApi>(`${API_URL}/reembolsos`, { ingresso: { id: ingressoId }, motivo: motivo.trim() })
+      .pipe(map(paraReembolso));
   }
 
-  // regra: não vender além da capacidade do evento
-  esgotado(evento: Evento): boolean {
-    return this.vendidosDoEvento(evento.id) >= evento.capacidade;
+  // pedidos pendentes dos eventos do organizador (GET /usuarios/{id}/reembolsos)
+  reembolsosPendentes(organizadorId: number): Observable<Reembolso[]> {
+    return this.http.get<ReembolsoApi[]>(`${API_URL}/usuarios/${organizadorId}/reembolsos`)
+      .pipe(map(lista => lista.map(paraReembolso)));
   }
 
-  // ingresso reembolsado já foi devolvido e não conta; os demais ainda prendem o evento
-  temIngressosAtivos(eventoId: number): boolean {
-    return this.listar().some(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO');
-  }
-
-  // o ingresso guarda uma cópia do nome, da data e do local: atualiza quando o evento é editado
-  atualizarDadosDoEvento(evento: Evento) {
-    const lista = this.listar();
-    for (const i of lista.filter(i => i.eventoId === evento.id)) {
-      i.eventoNome = evento.titulo;
-      i.data = evento.data;
-      i.local = evento.local;
-    }
-    this.gravar(lista);
-  }
-
-  // verdadeiro se o usuário já tem um ingresso válido deste evento
-  jaComprou(eventoId: number, email: string): boolean {
-    return this.listarDoUsuario(email).some(
-      i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO'
-    );
-  }
-
-  // quantas vezes a pessoa já foi reembolsada (aprovado) neste evento
-  reembolsosNoEvento(eventoId: number, email: string): number {
-    return this.listarDoUsuario(email).filter(i => i.eventoId === eventoId && i.status === 'REEMBOLSADO').length;
-  }
-
-  // regra: comprar e reembolsar o mesmo evento repetidamente não é permitido
-  compraBloqueada(eventoId: number, email: string): boolean {
-    return this.reembolsosNoEvento(eventoId, email) >= this.limiteReembolsosPorEvento;
-  }
-
-  // verdadeiro se, aprovado este pedido, a pessoa chega ao limite e não poderá comprar de novo
-  ehUltimoReembolso(ingresso: Ingresso): boolean {
-    return this.reembolsosNoEvento(ingresso.eventoId, ingresso.compradorEmail) + 1 >= this.limiteReembolsosPorEvento;
-  }
-
-  comprar(evento: Evento, titular: string, email: string): Ingresso | undefined {
-    if (this.compraBloqueada(evento.id, email) || this.esgotado(evento)) {
-      return undefined;
-    }
-    const id = Date.now();
-    const ingresso: Ingresso = {
-      id,
-      codigo: `CE-${evento.id}-${id}`,
-      eventoId: evento.id,
-      eventoNome: evento.titulo,
-      data: evento.data,
-      local: evento.local,
-      titular,
-      compradorEmail: email,
-      valor: evento.valor,
-      status: 'CONFIRMADO'
-    };
-    const lista = this.listar();
-    lista.push(ingresso);
-    this.gravar(lista);
-    return ingresso;
-  }
-
-  solicitarReembolso(id: number): { ok: boolean; mensagem: string } {
-    const lista = this.listar();
-    const ingresso = lista.find(i => i.id === id);
-
-    if (!ingresso || ingresso.status !== 'CONFIRMADO') {
-      return { ok: false, mensagem: 'Este ingresso não pode ser reembolsado.' };
-    }
-
-    const horasAteEvento = (new Date(ingresso.data).getTime() - Date.now()) / 3600000;
-    if (horasAteEvento < this.prazoReembolsoHoras) {
-      return {
-        ok: false,
-        mensagem: `O reembolso só pode ser solicitado até ${this.prazoReembolsoHoras} horas antes do início do evento.`
-      };
-    }
-
-    ingresso.status = 'REEMBOLSO_SOLICITADO';
-    this.gravar(lista);
-    return { ok: true, mensagem: 'Reembolso solicitado. Aguarde a aprovação do organizador.' };
-  }
-
-  aprovarReembolso(id: number) {
-    this.atualizarStatus(id, 'REEMBOLSADO');
+  aprovarReembolso(reembolsoId: number): Observable<Reembolso> {
+    return this.http.post<ReembolsoApi>(`${API_URL}/reembolsos/${reembolsoId}/aprovar`, null).pipe(map(paraReembolso));
   }
 
   // recusado: o ingresso volta a valer normalmente, com o QR Code
-  recusarReembolso(id: number) {
-    this.atualizarStatus(id, 'CONFIRMADO');
+  recusarReembolso(reembolsoId: number): Observable<Reembolso> {
+    return this.http.post<ReembolsoApi>(`${API_URL}/reembolsos/${reembolsoId}/recusar`, null).pipe(map(paraReembolso));
   }
 
-  validar(codigo: string): { valido: boolean; mensagem: string } {
-    const lista = this.listar();
-    const ingresso = lista.find(i => i.codigo === codigo.trim());
+  // ---- cálculos sobre a lista de ingressos da própria pessoa ----
 
-    if (!ingresso) {
-      return { valido: false, mensagem: 'Ingresso não encontrado.' };
-    }
-    if (ingresso.status === 'REEMBOLSADO') {
-      return { valido: false, mensagem: 'Ingresso reembolsado e invalidado.' };
-    }
-    if (ingresso.status === 'UTILIZADO') {
-      return { valido: false, mensagem: 'Ingresso já utilizado.' };
-    }
-    ingresso.status = 'UTILIZADO';
-    this.gravar(lista);
-    return { valido: true, mensagem: `Entrada liberada para ${ingresso.titular}.` };
+  // verdadeiro se a pessoa já tem um ingresso válido deste evento
+  jaComprou(ingressos: Ingresso[], eventoId: number): boolean {
+    return ingressos.some(i => i.eventoId === eventoId && i.status !== 'REEMBOLSADO');
   }
 
-  private atualizarStatus(id: number, status: Ingresso['status']) {
-    const lista = this.listar();
-    const ingresso = lista.find(i => i.id === id);
-    if (ingresso) {
-      ingresso.status = status;
-      this.gravar(lista);
-    }
+  // quantas vezes a pessoa já foi reembolsada (aprovado) neste evento
+  reembolsosNoEvento(ingressos: Ingresso[], eventoId: number): number {
+    return ingressos.filter(i => i.eventoId === eventoId && i.status === 'REEMBOLSADO').length;
   }
+
+  // regra: comprar e reembolsar o mesmo evento repetidamente não é permitido
+  compraBloqueada(ingressos: Ingresso[], eventoId: number): boolean {
+    return this.reembolsosNoEvento(ingressos, eventoId) >= this.limiteReembolsosPorEvento;
+  }
+
+  // verdadeiro se, aprovado este pedido, a pessoa chega ao limite e não poderá comprar de novo
+  ehUltimoReembolso(ingressos: Ingresso[], ingresso: Ingresso): boolean {
+    return this.reembolsosNoEvento(ingressos, ingresso.eventoId) + 1 >= this.limiteReembolsosPorEvento;
+  }
+}
+
+function paraIngresso(i: IngressoApi): Ingresso {
+  return {
+    id: i.id,
+    codigo: i.codigo,
+    eventoId: i.evento.id,
+    eventoNome: i.evento.titulo,
+    data: i.evento.dataHora.slice(0, 16),
+    local: i.evento.local,
+    titular: i.titular,
+    valor: Number(i.valor),
+    status: i.status,
+    participanteId: i.participante.id
+  };
+}
+
+function paraReembolso(r: ReembolsoApi): Reembolso {
+  return { id: r.id, motivo: r.motivo, status: r.status, ingresso: paraIngresso(r.ingresso) };
 }

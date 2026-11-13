@@ -243,3 +243,20 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
 
   .decisao { display: flex; }
 }
+.estado {
+  text-align: center;
+  color: #718096;
+
+  &.erro { color: #c53030; }
+}
+
+// nome de quem pediu o reembolso e o motivo informado
+.pedido {
+  display: flex;
+  flex-direction: column;
+
+  small {
+    color: #718096;
+    font-style: italic;
+  }
+}

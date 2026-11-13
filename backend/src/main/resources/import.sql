@@ -1,8 +1,11 @@
-insert into usuario (nome, email, perfil) values ('Ana Souza', 'ana@conectaevent.com', 'ORGANIZADOR');
-insert into usuario (nome, email, perfil) values ('Bruno Lima', 'bruno@conectaevent.com', 'ORGANIZADOR');
-insert into usuario (nome, email, perfil) values ('Carla Mendes', 'carla@email.com', 'PARTICIPANTE');
-insert into usuario (nome, email, perfil) values ('Diego Ramos', 'diego@email.com', 'PARTICIPANTE');
-insert into usuario (nome, email, perfil) values ('Elisa Prado', 'elisa@email.com', 'PARTICIPANTE');
+-- Senhas guardadas como hash BCrypt (nunca em texto puro):
+--   organizadores (Ana e Bruno)          -> organizador123
+--   participantes (Carla, Diego e Elisa) -> participante123
+insert into usuario (nome, email, perfil, senha) values ('Ana Souza', 'ana@conectaevent.com', 'ORGANIZADOR', '$2a$10$L332y4LtZpbwspNL3dAp..zgQkOUiPcHYx79Ixkc/s1iZIyBP3Jzy');
+insert into usuario (nome, email, perfil, senha) values ('Bruno Lima', 'bruno@conectaevent.com', 'ORGANIZADOR', '$2a$10$L332y4LtZpbwspNL3dAp..zgQkOUiPcHYx79Ixkc/s1iZIyBP3Jzy');
+insert into usuario (nome, email, perfil, senha) values ('Carla Mendes', 'carla@email.com', 'PARTICIPANTE', '$2a$10$HnoYQ02ORwhX.5jQDsn0KuBdXrc0oPaF/GxD.KSWwIpF1UMMVlzEe');
+insert into usuario (nome, email, perfil, senha) values ('Diego Ramos', 'diego@email.com', 'PARTICIPANTE', '$2a$10$HnoYQ02ORwhX.5jQDsn0KuBdXrc0oPaF/GxD.KSWwIpF1UMMVlzEe');
+insert into usuario (nome, email, perfil, senha) values ('Elisa Prado', 'elisa@email.com', 'PARTICIPANTE', '$2a$10$HnoYQ02ORwhX.5jQDsn0KuBdXrc0oPaF/GxD.KSWwIpF1UMMVlzEe');
 
 insert into categoria (nome, descricao) values ('Música', 'Shows, festivais e apresentações musicais');
 insert into categoria (nome, descricao) values ('Tecnologia', 'Palestras, hackathons e meetups de tecnologia');
