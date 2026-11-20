@@ -115,6 +115,9 @@ Novos usuários podem criar a própria conta pela rota pública `POST /usuarios/
 1. Importe `postman/conecta-event.postman_collection.json` no Postman.
 2. Inicie a API (o banco volta aos dados de exemplo).
 3. Execute as pastas **na ordem** (01 a 06). Os ids usados nas requisições contam com essa ordem.
+4. Reinicie a API e execute a pasta **07** sozinha (ela também conta com o banco recém-criado).
+
+Todas as requisições têm a resposta salva (**Save Response**), como evidência dos testes.
 
 As variáveis (`baseUrl`, usuários e senhas) estão na própria coleção.
 
