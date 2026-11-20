@@ -1,0 +1,97 @@
+<div class="page-container">
+  <p class="estado" *ngIf="carregando">Carregando pedido...</p>
+
+  <ng-container *ngIf="!carregando && evento && !bloqueio">
+    <h2>Finalizar compra</h2>
+
+    <div class="aviso-simulacao" role="note">
+      <mat-icon>info</mat-icon>
+      <span><b>Pagamento simulado (projeto acadêmico).</b> Nenhuma cobrança é feita. Não digite dados reais de cartão.</span>
+    </div>
+
+    <div class="checkout">
+      <!-- resumo do pedido -->
+      <mat-card appearance="outlined" class="resumo">
+        <small>Resumo do pedido</small>
+        <h3>{{ evento.titulo }}</h3>
+        <p><mat-icon>event</mat-icon> {{ evento.data | date:'dd/MM/yyyy' }} às {{ evento.data | date:'HH:mm' }}</p>
+        <p><mat-icon>place</mat-icon> {{ evento.local }}</p>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Titular do ingresso</mat-label>
+          <input matInput [(ngModel)]="titular" maxlength="100" [disabled]="processando">
+        </mat-form-field>
+
+        <div class="total">
+          <span>1 ingresso</span>
+          <strong>{{ evento.valor | currency:'BRL' }}</strong>
+        </div>
+      </mat-card>
+
+      <!-- forma de pagamento -->
+      <mat-card appearance="outlined" class="pagamento">
+        <small>Forma de pagamento</small>
+        <div class="abas" role="tablist">
+          <button type="button" role="tab" [class.ativa]="forma === 'pix'" [attr.aria-selected]="forma === 'pix'"
+                  [disabled]="processando" (click)="forma = 'pix'; erro = ''">
+            <mat-icon>qr_code_2</mat-icon> Pix
+          </button>
+          <button type="button" role="tab" [class.ativa]="forma === 'cartao'" [attr.aria-selected]="forma === 'cartao'"
+                  [disabled]="processando" (click)="forma = 'cartao'; erro = ''">
+            <mat-icon>credit_card</mat-icon> Cartão de crédito
+          </button>
+        </div>
+
+        <div class="pix" *ngIf="forma === 'pix'">
+          <img *ngIf="pixQrCode" [src]="pixQrCode" alt="QR Code Pix (simulado)">
+          <p>Escaneie o QR Code ou use o código copia e cola:</p>
+          <div class="copia-cola">
+            <code>{{ pixCopiaECola }}</code>
+            <button mat-stroked-button type="button" (click)="copiarPix()">
+              <mat-icon>{{ copiado ? 'check' : 'content_copy' }}</mat-icon> {{ copiado ? 'Copiado' : 'Copiar' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="cartao" *ngIf="forma === 'cartao'">
+          <mat-form-field appearance="outline">
+            <mat-label>Número do cartão</mat-label>
+            <input matInput inputmode="numeric" autocomplete="off" placeholder="4111 1111 1111 1111"
+                   [(ngModel)]="cartao.numero" (ngModelChange)="formatarNumero()" [disabled]="processando">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Nome impresso no cartão</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="cartao.nome" [disabled]="processando">
+          </mat-form-field>
+          <div class="linha">
+            <mat-form-field appearance="outline">
+              <mat-label>Validade</mat-label>
+              <input matInput inputmode="numeric" autocomplete="off" placeholder="MM/AA"
+                     [(ngModel)]="cartao.validade" (ngModelChange)="formatarValidade()" [disabled]="processando">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>CVV</mat-label>
+              <input matInput inputmode="numeric" autocomplete="off" placeholder="123"
+                     [(ngModel)]="cartao.cvv" (ngModelChange)="formatarCvv()" [disabled]="processando">
+            </mat-form-field>
+          </div>
+          <small class="dica">Para testar, use 4111 1111 1111 1111, qualquer validade futura e qualquer CVV.</small>
+        </div>
+
+        <p class="erro" *ngIf="erro" role="alert">{{ erro }}</p>
+
+        <button mat-flat-button class="btn-primary-sympla btn-confirmar" [disabled]="processando" (click)="confirmar()">
+          {{ processando ? 'Processando pagamento...'
+            : forma === 'pix' ? 'Já fiz o Pix' : 'Pagar ' + (evento.valor | currency:'BRL') }}
+        </button>
+        <a class="voltar" [routerLink]="['/eventos/detalhe', evento.id]">Voltar para o evento</a>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <!-- não dá para comprar (esgotado, já comprou, evento passou...) -->
+  <div class="estado" *ngIf="!carregando && bloqueio">
+    <p class="erro">{{ bloqueio }}</p>
+    <a [routerLink]="evento ? ['/eventos/detalhe', evento.id] : ['/']">Voltar</a>
+  </div>
+</div>

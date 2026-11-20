@@ -267,3 +267,14 @@ $sombra: 0 2px 8px rgba(0, 0, 0, .1);
   color: $branco !important;
   border-radius: 24px;
 }
+
+.compra-aprovada {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: $verde-claro;
+  color: $verde;
+}

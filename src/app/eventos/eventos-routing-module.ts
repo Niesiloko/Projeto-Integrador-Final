@@ -6,6 +6,7 @@ import { MeusIngressos } from './meus-ingressos/meus-ingressos';
 import { DetalheEvento } from './detalhe-evento/detalhe-evento';
 import { Categorias } from './categorias/categorias';
 import { Dashboard } from './dashboard/dashboard';
+import { Pagamento } from './pagamento/pagamento';
 import { perfilGuard } from '../shared/perfil.guard';
 
 // canActivate: só o perfil certo abre a tela (a API também confere e responde 403)
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'dashboard', component: Dashboard, ...organizador },
   { path: 'meus-eventos', component: MeusEventos, ...organizador },
   { path: 'meus-ingressos', component: MeusIngressos, ...participante },
+  { path: 'pagamento/:id', component: Pagamento, ...participante },
   { path: 'detalhe/:id', component: DetalheEvento },
 
 ];
