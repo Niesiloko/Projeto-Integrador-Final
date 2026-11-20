@@ -1,11 +1,44 @@
-# ConectaEvent
+# Conecta Event
 
-Sistema web de eventos: o **organizador** publica eventos e acompanha as vendas; o **participante** compra ingressos (com QR Code) e pode pedir reembolso.
+**Projeto Integrador IV – Engenharia de Software, 4º termo – UniFIO**
 
-- **Front-end:** Angular 22 + Angular Material (esta pasta)
+Sistema web de eventos: o **organizador** publica eventos com capacidade limitada e acompanha as vendas num dashboard; o **participante** compra ingressos (com QR Code) e pode pedir reembolso até 48 horas antes do evento, que o organizador aprova ou recusa.
+
+- **Front-end:** Angular 22 + Angular Material (raiz deste repositório)
 - **Back-end:** API REST em Spring Boot + MySQL (pasta [`backend/`](backend/README.md))
 
-O front usa a API em todas as telas: os dados ficam no MySQL, não no navegador.
+O front usa a API em todas as telas: os dados ficam no banco MySQL, não no navegador.
+
+## Integrantes
+
+| Nome completo | ID acadêmico |
+|---|---|
+| Lucas Scalada Noesse | 272362 |
+| Kauã Yury Furtado | 272866 |
+| Ana Carolina Medeiro | 273548 |
+| Ana Clara Correa | 272358 |
+
+## Objetivo do backend
+
+Oferecer uma API REST que guarda os dados do Conecta Event no MySQL e aplica as regras do negócio: controle de capacidade na compra de ingressos (inscrição e controle de participantes), um ingresso por pessoa por evento, limite de 2 reembolsos por pessoa no mesmo evento, reembolso até 48 horas antes com aprovação do organizador, check-in do ingresso na entrada e acesso separado por perfil (organizador e participante). Detalhes no [README do backend](backend/README.md).
+
+## Tecnologias
+
+- **Back-end:** Java 21, Spring Boot 4.1 (Web MVC, Data JPA, Validation, Security com HTTP Basic), MySQL 8, Lombok, Maven
+- **Front-end:** Angular 22 (`standalone: false`, NgModules, sem SSR), Angular Material, RxJS
+- **Testes da API:** Postman
+- **Nuvem:** Render (site e API em Docker) e TiDB Cloud (banco compatível com MySQL)
+
+## Documentação
+
+| Material | Onde |
+|---|---|
+| Diagrama de classes (documentação técnica, PDF) | [backend/docs/DocumentacaoTecnicaUMLConectaEvent.pdf](backend/docs/DocumentacaoTecnicaUMLConectaEvent.pdf) |
+| Modelo de dados | [backend/docs/modelo-dados.md](backend/docs/modelo-dados.md) |
+| Endpoints, permissões, regras e consultas | [backend/docs/documentacao-api.md](backend/docs/documentacao-api.md) |
+| Coleção Postman (com variáveis e respostas salvas) | [backend/postman/conecta-event.postman_collection.json](backend/postman/conecta-event.postman_collection.json) |
+| Configurar e executar o backend | [backend/README.md](backend/README.md) |
+| Publicar na nuvem | [PUBLICACAO.md](PUBLICACAO.md) |
 
 ## Aplicação publicada
 
@@ -57,62 +90,10 @@ Na tela de cadastro, a pessoa escolhe se quer ser organizador ou participante. S
 - Desenvolvimento (`npm start`): `/api`, pelo proxy, em `src/environments/environment.ts`.
 - Produção (`ng build`): endereço público da API, em `src/environments/environment.production.ts`.
 
----
+## Comandos do front-end
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Comando | O que faz |
+|---|---|
+| `npm install` | Instala as dependências (só na primeira vez) |
+| `npm start` | Roda o site em modo de desenvolvimento em `http://localhost:4200` (com o proxy para a API) |
+| `npm run build` | Gera a versão de produção em `dist/conecta-event/browser` |
