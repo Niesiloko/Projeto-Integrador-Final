@@ -9,6 +9,7 @@ O front usa a API em todas as telas: os dados ficam no MySQL, não no navegador.
 
 ## Aplicação publicada
 
+- **Repositório:** https://github.com/lucas-noesse/Projeto-Integrador-Final
 - **Site:** https://conecta-event.onrender.com
 - **API:** https://conecta-event-api.onrender.com (exemplo: [`/eventos/futuros`](https://conecta-event-api.onrender.com/eventos/futuros))
 
