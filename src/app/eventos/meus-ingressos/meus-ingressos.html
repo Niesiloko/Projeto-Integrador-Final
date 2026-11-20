@@ -1,6 +1,11 @@
 <div class="page-container">
   <h2>Meus Ingressos</h2>
 
+  <div class="compra-aprovada" *ngIf="compraAprovada" role="status">
+    <mat-icon>check_circle</mat-icon>
+    <span><b>Pagamento aprovado!</b> Seu ingresso já está disponível abaixo. Apresente o QR Code na entrada.</span>
+  </div>
+
   <p class="estado" *ngIf="carregando">Carregando seus ingressos...</p>
   <p class="estado erro" *ngIf="erro" role="alert">{{ erro }}</p>
   <div class="estado" *ngIf="!carregando && !erro && ingressos.length === 0">

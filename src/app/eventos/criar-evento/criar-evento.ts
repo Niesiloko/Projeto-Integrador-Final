@@ -19,6 +19,7 @@ export class CriarEvento {
   idEdicao?: number;
   categorias: Categoria[] = [];
   vendidos = 0;
+  readonly capacidadeMaxima = 100000;
   erro = '';
   salvando = false;
 
@@ -101,6 +102,13 @@ export class CriarEvento {
     }
     if (!Number.isInteger(this.evento.capacidade) || this.evento.capacidade < 1) {
       this.erro = 'A capacidade deve ser um número inteiro de pelo menos 1 pessoa.';
+      return;
+    }
+    // mesmo limite do @Max da entidade Evento.java. Conferir aqui também é necessário:
+    // um número gigante (ex.: 1 trilhão) nem cabe no Integer do Java, e a API recusaria
+    // o JSON inteiro com uma mensagem genérica, antes de chegar na validação do @Max.
+    if (this.evento.capacidade > this.capacidadeMaxima) {
+      this.erro = `A capacidade deve ser de no máximo ${this.capacidadeMaxima} pessoas.`;
       return;
     }
     // regra: na edição, a capacidade não pode ficar menor que os ingressos já vendidos

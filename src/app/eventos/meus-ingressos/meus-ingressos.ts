@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as QRCode from 'qrcode';
 import { Ingresso } from '../../shared/navbar/ingresso.model';
 import { IngressoService } from '../../shared/navbar/ingresso.service';
@@ -28,11 +29,16 @@ export class MeusIngressos {
   enviando = false;
   avisos: Record<number, { texto: string; erro: boolean }> = {};
 
+  // vindo da tela de pagamento (?comprado=<id do evento>): mostra a confirmação no topo
+  compraAprovada = false;
+
   constructor(
     public ingressoService: IngressoService,
     private auth: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    route: ActivatedRoute
   ) {
+    this.compraAprovada = route.snapshot.queryParamMap.has('comprado');
     this.carregar();
   }
 

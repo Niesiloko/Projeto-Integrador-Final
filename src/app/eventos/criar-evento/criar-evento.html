@@ -42,7 +42,8 @@
       <div class="row-inputs">
         <mat-form-field appearance="outline">
           <mat-label>Capacidade (pessoas)</mat-label>
-          <input matInput type="number" min="1" step="1" [(ngModel)]="evento.capacidade" required>
+          <input matInput type="number" min="1" [max]="capacidadeMaxima" step="1" [(ngModel)]="evento.capacidade" required>
+          <mat-hint>De 1 a {{ capacidadeMaxima }} pessoas</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">

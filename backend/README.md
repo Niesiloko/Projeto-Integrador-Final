@@ -132,6 +132,7 @@ Como rodar os dois juntos: veja o [README principal](../README.md).
 ## Documentação
 
 - [Modelo de dados (diagrama de classes)](docs/modelo-dados.md)
+- [Documentação técnica com o diagrama de classes UML (PDF)](docs/DocumentacaoTecnicaUMLConectaEvent.pdf)
 - [Endpoints, permissões, regras de negócio e consultas](docs/documentacao-api.md)
 
 ## Integrantes

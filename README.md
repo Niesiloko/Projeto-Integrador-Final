@@ -9,8 +9,14 @@ O front usa a API em todas as telas: os dados ficam no MySQL, não no navegador.
 
 ## Aplicação publicada
 
-- **Site:** _preencher com o link do Render_
-- **API:** _preencher com o link do Render_
+- **Site:** https://conecta-event.onrender.com
+- **API:** https://conecta-event-api.onrender.com (exemplo: [`/eventos/futuros`](https://conecta-event-api.onrender.com/eventos/futuros))
+
+Hospedagem: site e API no [Render](https://render.com) (plano gratuito) e banco MySQL no [TiDB Cloud](https://tidbcloud.com) (compatível com MySQL, plano Starter gratuito).
+
+**Acesso para teste:** organizador `ana@conectaevent.com` / `organizador123` · participante `carla@email.com` / `participante123` (as contas também aparecem na tela de login; clique nelas para preencher). Veja abaixo o que cada perfil acessa.
+
+O **pagamento é simulado** (projeto acadêmico): na compra, o participante escolhe Pix (QR Code de demonstração) ou cartão (use `4111 1111 1111 1111`, qualquer validade futura e qualquer CVV). Nenhuma cobrança é feita e os dados do cartão não são enviados à API.
 
 O primeiro acesso pode levar até 2 minutos: no plano gratuito, a API "dorme" quando não é usada (o site avisa enquanto ela acorda). Ao acordar, os dados voltam aos exemplos iniciais.
 

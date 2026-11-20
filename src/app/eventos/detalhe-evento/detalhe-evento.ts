@@ -83,6 +83,11 @@ export class DetalheEvento {
       this.router.navigate(['/login']);
       return;
     }
+    // evento pago: vai para a tela de pagamento (simulado); gratuito: confirma direto
+    if (this.evento.valor > 0) {
+      this.router.navigate(['/eventos/pagamento', this.evento.id]);
+      return;
+    }
     this.comprando = true;
     this.erro = '';
     this.ingressoService.comprar(this.evento.id, usuario.id, usuario.nome).subscribe({
